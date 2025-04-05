@@ -24,7 +24,7 @@ const AppStart: React.FC<NavigationProps> = ({ navigation }) => {
         }
         console.log('动画结束');
         navigation.replace('AppMain');
-    }, [navigation, theme]);
+    }, [navigation]);
 
     // 倒计时效果
     useEffect(() => {
