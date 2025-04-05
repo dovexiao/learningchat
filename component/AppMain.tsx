@@ -13,11 +13,11 @@ const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
         setActiveBottomTabIndex(bottomTabId);
     };
 
-    const renderItemAccessory = (): React.ReactElement => {
-        return (
-            <></>
-        );
-    };
+    // const renderItemAccessory = (): React.ReactElement => {
+    //     return (
+    //         <></>
+    //     );
+    // };
 
     const ComponentToRender = BottomTabData[activeBottomTabIndex].component;
 

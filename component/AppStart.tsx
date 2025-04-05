@@ -23,7 +23,6 @@ const AppStart: React.FC<NavigationProps> = ({ navigation }) => {
             clearTimeout(countdownRef.current);
         }
         console.log('动画结束');
-        console.log('backgroundColor: ', theme['color-appStart-default'], theme['color-primary-100']);
         navigation.replace('AppMain');
     }, [navigation, theme]);
 
