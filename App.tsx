@@ -16,7 +16,7 @@ import { default as darkTheme } from './dark-theme.json';
 
 type Theme = 'light' | 'dark';
 
-function App(): React.JSX.Element {
+function App(): JSX.Element {
     const [theme, setTheme] = React.useState<Theme>('light');
     const [customTheme, setCustomTheme] = React.useState(lightTheme);
 

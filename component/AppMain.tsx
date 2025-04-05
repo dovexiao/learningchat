@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-export const AppMain = () => {
+const AppMain = () => {
     return (
         <>
             <View>
@@ -9,3 +9,5 @@ export const AppMain = () => {
         </>
     );
 };
+
+export default AppMain;

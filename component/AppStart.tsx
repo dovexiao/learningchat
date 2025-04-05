@@ -11,7 +11,7 @@ import LottieView from 'lottie-react-native';
 import { NavigationProps } from '../types/navigationType.tsx';
 import { useTheme } from '@ui-kitten/components';
 
-export const AppStart: React.FC<NavigationProps> = ({ navigation }) => {
+const AppStart: React.FC<NavigationProps> = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [countdown, setCountdown] = useState(2); // 5秒倒计时
     const animationRef = useRef<LottieView>(null);
@@ -120,3 +120,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
+
+export default AppStart;
