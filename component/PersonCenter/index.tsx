@@ -1,11 +1,12 @@
+import { Text } from '@ui-kitten/components';
 import React from 'react';
 import {View} from 'react-native';
 
 const PersonCenter = () => {
     return (
-        <View>
-            personCenter
-        </View>
+        <>
+            <Text>personCenter</Text>
+        </>
     );
 };
 

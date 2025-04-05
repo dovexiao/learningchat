@@ -4,6 +4,7 @@
   "color-appStart-buttonBg": "rgba(0,0,0,0.08)",
   "color-appStart-buttonBorder": "rgba(0,0,0,0.2)",
   "color-appStart-loadingOverlay": "rgba(0,0,0,0.5)",
+  "text-basic-color": "#222B45",
   "color-primary-100": "#D6E4FF",
   "color-primary-200": "#ADC8FF",
   "color-primary-300": "#84A9FF",
