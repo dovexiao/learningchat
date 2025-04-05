@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {BottomTabBar, BottomTabData} from "./BottomNavigation";
-import TopNavigationAvatar from "./TopNavigation/TopNavigationAvatar.tsx";
-import {NavigationProps} from "../types/navigationType.tsx";
-import ChatSpace from "./ChatSpace";
-import {StyleSheet, View} from "react-native";
+import {BottomTabBar, BottomTabData} from './BottomNavigation';
+import TopNavigationAvatar from './TopNavigation/TopNavigationAvatar.tsx';
+import {NavigationProps} from '../types/navigationType.tsx';
+import {StyleSheet, View} from 'react-native';
 import { Text } from '@ui-kitten/components';
 
 const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
