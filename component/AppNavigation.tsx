@@ -5,9 +5,10 @@ import AppStart from './AppStart';
 import AppMain from './AppMain';
 import AppAuthToken from './AppAuthToekn';
 import PersonCenter from './PersonCenter';
-import ChatSpace from './ChatSpace';
 import SharedNote from './SharedNote';
-import SharedQuestion from "./SharedQuestion";
+import SharedQuestion from './SharedQuestion';
+import MessageList from './ChatSpace';
+import ChatSpace from './ChatSpace/ChatSpace';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -17,7 +18,8 @@ const HomeNavigator = () => (
         <Screen name="AppMain" component={AppMain} />
         <Screen name="AppAuthToken" component={AppAuthToken} />
         <Screen name="PersonCenter" component={PersonCenter} />
-        <Screen name="ChatSpace" component={ChatSpace} />
+        <Screen name="MessageList" component={MessageList} />
+        <Screen name="ChatSpace" component={ChatSpace} initialParams={{index: 0}} />
         <Screen name="SharedNote" component={SharedNote} />
         <Screen name="SharedQuestion" component={SharedQuestion} />
     </Navigator>

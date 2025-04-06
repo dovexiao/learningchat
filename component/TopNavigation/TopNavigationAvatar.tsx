@@ -7,16 +7,16 @@ import {
     TopNavigationAction,
     useTheme,
     Button,
-    Icon
+    Icon,
 } from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
-import {ThemeContext} from "../../hooks/ThemeContext.tsx";
+import {ThemeContext} from '../../hooks/ThemeContext.tsx';
 
 interface TopNavigationAvatarProps {
     navigation: any;
 }
 
-const UserAvatar = (props: any): React.ReactElement => (
+const UserAvatar = (): React.ReactElement => (
     <Avatar
         style={styles.avatar}
         source={require('../../assets/icon.png')}
@@ -26,14 +26,14 @@ const UserAvatar = (props: any): React.ReactElement => (
 const SunIcon = (props: any): IconElement => (
     <Icon
         {...props}
-        name='sun-outline'
+        name="sun-outline"
     />
 );
 
 const MoonIcon = (props: any): IconElement => (
     <Icon
         {...props}
-        name='moon-outline'
+        name="moon-outline"
     />
 );
 
@@ -57,17 +57,17 @@ const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation })
         <View style={styles.titleContainer}>
             <TopNavigationAction icon={UserAvatar} onPress={handleGoPersonCenter} />
             <View style={styles.info}>
-                <Text category='h6' style={{color: themes['text-basic-color']}}>用户123</Text>
-                <Text appearance='hint' category='c1' status='success'>强网络</Text>
+                <Text category="h6" style={{color: themes['text-basic-color']}}>用户123</Text>
+                <Text appearance="hint" category="c1" status="success">强网络</Text>
             </View>
         </View>
-    )
+    );
 
     const renderToggleTheme = (): React.ReactElement => (
         <Button
-            status='primary'
-            accessoryLeft={themeIcon === 'sun'? SunIcon : MoonIcon}
-            appearance='ghost'
+            status="primary"
+            accessoryLeft={themeIcon === 'sun' ? SunIcon : MoonIcon}
+            appearance="ghost"
             onPress={onThemeChange}
         />
     );
