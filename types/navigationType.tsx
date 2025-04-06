@@ -4,6 +4,7 @@ export interface NavigationProps {
 }
 
 export type RootStackParamList = {
-    MessageList: undefined;
+    ChatComponent: undefined;
     ChatSpace: { index: number };
+    NoteComponent: undefined;
 };

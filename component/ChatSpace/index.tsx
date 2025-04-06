@@ -1,115 +1,72 @@
-import { Divider, Icon, Layout, List, Text, useTheme } from '@ui-kitten/components';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp  } from '@react-navigation/stack';
-import { SafeAreaView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { NavigationProps, RootStackParamList } from '../../types/navigationType.tsx';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { RootStackParamList } from '../../types/navigationType.tsx';
+import TopNavigationAvatar from "../TopNavigation/TopNavigationAvatar.tsx";
+import { Divider, Icon, Layout, Text } from '@ui-kitten/components';
+import type { IconElement } from '@ui-kitten/components';
+import { AccessList } from "../List";
 
-type ChatSpaceNavigationProp = StackNavigationProp<RootStackParamList, 'ChatSpace'>;
-
-interface IListItem {
-    chatSpaceName: string;
-    lastMessage: string;
-    unreadCount: number;
-}
+type ChatNavigationProp = StackNavigationProp<RootStackParamList, 'ChatComponent'>;
 
 const data = new Array(15).fill({
-    chatSpaceName: '用户123',
-    lastMessage: 'Description for Item 1234556787577522222211314141',
-    unreadCount: 1000,
+    title: '用户123',
+    subTitle: 'Description for Item 1234556787577522222211314141',
+    other: 1000,
 });
 
-const MessageList: React.FC<NavigationProps> = () => {
-    const navigation = useNavigation<ChatSpaceNavigationProp>();
-    const themes = useTheme();
+const MessageList: React.FC = () => {
+    const navigation = useNavigation<ChatNavigationProp>();
     const onMessageClick = (index: number) => {
         navigation.navigate('ChatSpace', { index });
     };
 
-    const renderItem = ({ item, index }: { item: IListItem; index: number }): React.ReactElement => (
-        <TouchableOpacity
-            style={[styles.messageItem, { backgroundColor: themes['background-basic-color-1']}]}
-            onPress={() => onMessageClick(index)}
-        >
-            <View style={styles.avatarContainer}>
-                <Icon
-                    name="person"
-                />
-            </View>
-            <View style={styles.messageContent}>
-                <Text style={styles.chatSpaceName} numberOfLines={1} ellipsizeMode={'tail'}>
-                    {item.chatSpaceName}
-                </Text>
-                <Text style={styles.lastMessage} numberOfLines={1} ellipsizeMode={'tail'}>
-                    {item.lastMessage}
-                </Text>
-            </View>
-            {item.unreadCount > 0 && (
-                <View style={styles.unreadBadge}>
-                    <Text style={styles.unreadText}>
-                        {item.unreadCount > 99 ? '99+' : item.unreadCount}
-                    </Text>
-                </View>
-            )}
-        </TouchableOpacity>
-    );
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            <TopNavigationAvatar
+                navigation={navigation}
+                // renderItemAccessory={renderItemAccessory}
+            />
             <Divider />
             <Layout style={{ flex: 1, alignItems: 'center'}}>
-                <List
-                    style={styles.container}
+                <AccessList
                     data={data}
-                    ItemSeparatorComponent={Divider}
-                    renderItem={renderItem}
+                    accessoryLeft={accessoryLeft}
+                    accessoryRight={accessoryRight}
+                    onListItemClick={onMessageClick}
                 />
             </Layout>
         </SafeAreaView>
     );
 };
 
+const accessoryLeft = (): IconElement => (
+    <Icon
+        name="person"
+    />
+)
+
+const accessoryRight = (item: any) => (
+    <>
+        {item.other > 0 && (
+            <View style={styles.unreadBadge}>
+                <Text style={styles.unreadText}>
+                    {item.other > 99 ? '99+' : item.other}
+                </Text>
+            </View>
+        )}
+    </>
+)
+
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-    },
-    messageItem: {
-        height: 80,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    avatarContainer: {
-        width: 40,
-        height: 40,
-        // borderRadius: 20,
-        // backgroundColor: '#ccc',
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        marginHorizontal: 10,
-    },
-    messageContent: {
-        flex: 1,
-    },
-    chatSpaceName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 3,
-    },
-    lastMessage: {
-        fontSize: 14,
-        color: '#666',
-    },
     unreadBadge: {
         backgroundColor: 'red',
-        borderRadius: 12,
-        height: 24,
-        minWidth: 24,
+        borderRadius: 13,
+        height: 26,
+        minWidth: 26,
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: 25,
-        marginRight: 15,
-        paddingHorizontal: 6,
     },
     unreadText: {
         color: '#fff',
