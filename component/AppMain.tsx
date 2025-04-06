@@ -1,31 +1,20 @@
 import React, {useState} from 'react';
 import {BottomTabBar, BottomTabData} from './BottomNavigation';
-import TopNavigationAvatar from './TopNavigation/TopNavigationAvatar.tsx';
 import {NavigationProps} from '../types/navigationType.tsx';
 import {StyleSheet, View} from 'react-native';
 import { Text } from '@ui-kitten/components';
 
-const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
+const AppMain: React.FC = () => {
     const [activeBottomTabIndex, setActiveBottomTabIndex] = useState<number>(0);
 
     const handleBottomTabClick = (bottomTabId: number) => {
         setActiveBottomTabIndex(bottomTabId);
     };
 
-    // const renderItemAccessory = (): React.ReactElement => {
-    //     return (
-    //         <></>
-    //     );
-    // };
-
     const ComponentToRender = BottomTabData[activeBottomTabIndex].component;
 
     return (
         <>
-            <TopNavigationAvatar
-                navigation={navigation}
-                // renderItemAccessory={renderItemAccessory}
-            />
             <View style={styles.container}>
                 {ComponentToRender ? (
                     React.createElement(ComponentToRender)
