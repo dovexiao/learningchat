@@ -11,6 +11,11 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		4173D20130614D79AB6C17AD /* animation-2025start.json in Resources */ = {isa = PBXBuildFile; fileRef = 90D3E67A32F5458487A018EE /* animation-2025start.json */; };
+		B6972D773495494D809D9F1F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2F02E1A3C4DD09E7ED907 /* icon.png */; };
+		7833B3E534A046AFA470034C /* quill-editor.html in Resources */ = {isa = PBXBuildFile; fileRef = 8EB8073EB9C748AD87F4E73A /* quill-editor.html */; };
+		3C442FCD44DC428A818E1876 /* quill.js in Resources */ = {isa = PBXBuildFile; fileRef = 118D3BD41C8D4466865B7552 /* quill.js */; };
+		1FAF1649BB014509AE08131C /* quill.snow.css in Resources */ = {isa = PBXBuildFile; fileRef = 33A8089E389345AF90E95EDF /* quill.snow.css */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,11 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = learningchat/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = learningchat/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		90D3E67A32F5458487A018EE /* animation-2025start.json */ = {isa = PBXFileReference; name = "animation-2025start.json"; path = "../assets/animation-2025start.json"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8CF2F02E1A3C4DD09E7ED907 /* icon.png */ = {isa = PBXFileReference; name = "icon.png"; path = "../assets/icon.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8EB8073EB9C748AD87F4E73A /* quill-editor.html */ = {isa = PBXFileReference; name = "quill-editor.html"; path = "../assets/quill/quill-editor.html"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		118D3BD41C8D4466865B7552 /* quill.js */ = {isa = PBXFileReference; name = "quill.js"; path = "../assets/quill/quill.js"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		33A8089E389345AF90E95EDF /* quill.snow.css */ = {isa = PBXFileReference; name = "quill.snow.css"; path = "../assets/quill/quill.snow.css"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +103,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				B8311C3C8D6C4D158638E591 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -115,6 +126,19 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		B8311C3C8D6C4D158638E591 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				90D3E67A32F5458487A018EE /* animation-2025start.json */,
+				8CF2F02E1A3C4DD09E7ED907 /* icon.png */,
+				8EB8073EB9C748AD87F4E73A /* quill-editor.html */,
+				118D3BD41C8D4466865B7552 /* quill.js */,
+				33A8089E389345AF90E95EDF /* quill.snow.css */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -185,6 +209,11 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				4173D20130614D79AB6C17AD /* animation-2025start.json in Resources */,
+				B6972D773495494D809D9F1F /* icon.png in Resources */,
+				7833B3E534A046AFA470034C /* quill-editor.html in Resources */,
+				3C442FCD44DC428A818E1876 /* quill.js in Resources */,
+				1FAF1649BB014509AE08131C /* quill.snow.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

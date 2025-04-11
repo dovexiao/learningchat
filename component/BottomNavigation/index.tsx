@@ -1,14 +1,15 @@
 import React from 'react';
 import {BottomNavigation, BottomNavigationTab, Icon, IconElement} from '@ui-kitten/components';
-import MessageList from '../ChatSpace';
-import SharedNote from '../SharedNote';
-import SharedQuestion from '../SharedQuestion';
-import LearnForum from '../LearnForum';
+import ChatMain from '../../screens/ChatScreen';
+import NoteMain from '../../screens/NoteScreen';
+import QuestionMain from '../../screens/QuestionsScreen';
+import ForumMain from '../../screens/ForumScreen';
+import {NavigationProps} from '../../types/navigationType.tsx';
 
-interface TabItem<T = {}> {
+interface TabItem {
     key: string;
     label: string;
-    component: React.ComponentType<T>;
+    component: React.ComponentType<NavigationProps>;
     icon: (props: any) => IconElement;
 }
 
@@ -46,10 +47,10 @@ const learnForumIcon = (props: any): IconElement => (
 );
 
 export const BottomTabData: TabItem[] = [
-    { key: 'CHAT_SPACE', label: '消息', component: MessageList as React.ComponentType<{}>, icon: chatSpaceIcon },
-    { key: 'SHARED_NOTE', label: '笔记', component: SharedNote as React.ComponentType<{}>, icon: sharedNoteIcon },
-    { key: 'SHARED_QUESTION', label: '题库', component: SharedQuestion as React.ComponentType<{}>, icon: sharedQuestionIcon },
-    { key: 'LEARN_FORUM', label: '论坛', component: LearnForum as React.ComponentType<{}>, icon: learnForumIcon },
+    { key: 'CHAT_SPACE', label: '消息', component: ChatMain as React.ComponentType<NavigationProps>, icon: chatSpaceIcon },
+    { key: 'SHARED_NOTE', label: '笔记', component: NoteMain as React.ComponentType<NavigationProps>, icon: sharedNoteIcon },
+    { key: 'SHARED_QUESTION', label: '题库', component: QuestionMain as React.ComponentType<NavigationProps>, icon: sharedQuestionIcon },
+    { key: 'LEARN_FORUM', label: '论坛', component: ForumMain as React.ComponentType<NavigationProps>, icon: learnForumIcon },
 ];
 
 export const BottomTabBar: React.FC<BottomTabBarProp> = ({ onBottomTabClick, index }: any) => {

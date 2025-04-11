@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ThemeContextType {
+type ThemeContextType = {
     theme: 'light' | 'dark';
     toggleTheme: () => void;
 }

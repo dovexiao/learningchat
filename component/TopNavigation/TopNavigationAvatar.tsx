@@ -57,7 +57,7 @@ const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation })
         <View style={styles.titleContainer}>
             <TopNavigationAction icon={UserAvatar} onPress={handleGoPersonCenter} />
             <View style={styles.info}>
-                <Text category="h6" style={{color: themes['text-basic-color']}}>用户123</Text>
+                <Text category="h6">用户123</Text>
                 <Text appearance="hint" category="c1" status="success">强网络</Text>
             </View>
         </View>

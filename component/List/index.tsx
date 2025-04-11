@@ -1,6 +1,6 @@
 import React from 'react';
-import {Divider, List, useTheme} from "@ui-kitten/components";
-import {Text, TouchableOpacity, View, StyleSheet} from "react-native";
+import {Divider, List, useTheme, Text} from '@ui-kitten/components';
+import {TouchableOpacity, View, StyleSheet} from 'react-native';
 
 interface IListItem {
     title: string;
@@ -10,7 +10,7 @@ interface IListItem {
 
 interface ListProps {
     data: IListItem[],
-    onListItemClick: (index: number) => void;
+    onListItemClick: (item: any) => void;
     accessoryLeft: () => React.ReactElement;
     accessoryRight: (item: IListItem) => React.ReactElement;
 }
@@ -21,16 +21,16 @@ export const AccessList: React.FC<ListProps> = ({ data, onListItemClick, accesso
     const renderItem = ({ item, index }: { item: IListItem, index: number }) => (
         <TouchableOpacity
             style={[styles.container, { backgroundColor: themes['background-basic-color-1']}]}
-            onPress={() => onListItemClick(index)}
+            onPress={() => onListItemClick(item)}
         >
             <View style={styles.avatarContainer}>
                 {accessoryLeft()}
             </View>
             <View style={styles.contentContainer}>
-                <Text style={[styles.title, { color: themes['text-basic-color'] }]} numberOfLines={1} ellipsizeMode={'tail'}>
+                <Text style={styles.title} numberOfLines={1} ellipsizeMode={'tail'}>
                     {item.title}
                 </Text>
-                <Text style={[styles.subTitle, { color: themes['text-basic-color'] }]} numberOfLines={1} ellipsizeMode={'tail'}>
+                <Text style={styles.subTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                     {item.subTitle}
                 </Text>
             </View>
@@ -38,7 +38,7 @@ export const AccessList: React.FC<ListProps> = ({ data, onListItemClick, accesso
                 {accessoryRight(item)}
             </View>
         </TouchableOpacity>
-    )
+    );
 
     return (
         <List
@@ -47,7 +47,7 @@ export const AccessList: React.FC<ListProps> = ({ data, onListItemClick, accesso
             ItemSeparatorComponent={Divider}
             renderItem={renderItem}
         />
-    )
+    );
 };
 
 const styles = StyleSheet.create({

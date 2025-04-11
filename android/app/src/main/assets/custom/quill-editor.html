@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               minimum-scale=1.0,
+               user-scalable=no,
+               shrink-to-fit=no">
+    <script src="./quill.js"></script>
+    <link href="./quill.snow.css" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            border: none;
+            overflow: hidden;
+        }
+        #editor {
+            width: 100vw;
+            height: 100vh;
+            font-size: 18px;
+            border: none;
+            transform: none !important; /* 禁止任何缩放 */
+        }
+        /* 允许垂直滚动，但禁止横向滚动 */
+        html {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+<div id="editor"></div>
+<script>
+    window.quill = new Quill('#editor', {
+        modules: { toolbar: false },
+        theme: 'snow'
+    });
+    window.quill.on('text-change', () => {
+        const delta = quill.getContents();
+        const selection = quill.getSelection();
+        window.ReactNativeWebView.postMessage(JSON.stringify({
+            type: 'content-change',
+            delta,
+            selection
+        }));
+    });
+    // 通信: RN -> WebView
+    document.addEventListener('message', (msg) => {
+        const editor = document.getElementById('editor')
+    })
+    window.addEventListener('message', (msg) => {
+        const editor = document.getElementById('editor')
+    })
+
+    window.quill.on('selection-change', (range) => {
+        if (range) {
+            // 获取当前光标所在的 DOM 节点
+            const selection = window.getSelection();
+            const focusNode = selection.focusNode;
+
+            // 如果是文本节点，向上找到父元素
+            const targetElement = focusNode.nodeType === 3 ? focusNode.parentElement : focusNode;
+
+            // 滚动到该元素
+            targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'  // 垂直居中
+            });
+        }
+    });
+
+    document.addEventListener('keyboardDidShow', () => {
+        const activeElement = document.activeElement;
+        if (activeElement && activeElement.closest('.ql-editor')) {
+            setTimeout(() => {
+                activeElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            }, 300); // 稍等键盘动画结束
+        }
+    });
+</script>
+</body>
+</html>

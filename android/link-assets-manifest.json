@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/animation-2025start.json",
+      "sha1": "e8217ed748ac1a7052cb49cd70aad2c79e5da45a"
+    },
+    {
+      "path": "assets/icon.png",
+      "sha1": "2f2a6f0f25b596690fb00fa4154649a62ad9745f"
+    },
+    {
+      "path": "assets/quill/quill-editor.html",
+      "sha1": "42183ee1df56e63add7a69a4335ac68130683251"
+    },
+    {
+      "path": "assets/quill/quill.js",
+      "sha1": "211f5cc4f26d331aef81f09df1c543b318be503a"
+    },
+    {
+      "path": "assets/quill/quill.snow.css",
+      "sha1": "4ba119dbe6f5b1a7df0f6700a6f50a9aababa287"
+    }
+  ]
+}
