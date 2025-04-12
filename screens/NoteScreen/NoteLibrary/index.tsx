@@ -6,7 +6,6 @@ import {NavigationProps} from '../../../types/navigationType.tsx';
 import {AccessList} from '../../../component/List';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';
 import * as CommonIcon from '../../../component/Icon';
-import {FileTextIcon} from "../../../component/Icon/FileTextIcon.tsx";
 
 const data = new Array(10).fill({
     title: '图形学之史',
