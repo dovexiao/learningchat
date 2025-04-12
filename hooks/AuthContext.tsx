@@ -11,21 +11,19 @@ export const AuthContext = React.createContext<AuthContextType | null>(null);
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [isTokenExpired, setIsTokenExpired] = React.useState<boolean | undefined>(undefined);
 
-    const checkTokenExpiration = async () => {
-        try {
-            const token = await TokenManager.refreshToken();
-            if (token) {
-                setIsTokenExpired(true);
-            } else {
-                setIsTokenExpired(false);
-            }
-        } catch (error) {
-            errAlert(error);
-        }
-    };
-
     React.useEffect(() => {
-        checkTokenExpiration().then(() => {});
+        (async () => {
+            try {
+                const token = await TokenManager.refreshToken();
+                if (token) {
+                    setIsTokenExpired(true);
+                } else {
+                    setIsTokenExpired(false);
+                }
+            } catch (error) {
+                errAlert(error);
+            }
+        })();
     }, []);
 
     return (
