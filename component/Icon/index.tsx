@@ -5,3 +5,7 @@ export * from './PersonIcon';
 export * from './FolderIcon';
 export * from './FileIcon';
 export * from './GithubIcon';
+export * from './QuestionIcon';
+export * from './BasicOpeIcon';
+export * from './FileTextIcon';
+export * from './ListIcon';
