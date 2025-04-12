@@ -5,7 +5,6 @@ import {
     Text,
     TopNavigation,
     TopNavigationAction,
-    useTheme,
     Button,
     Icon,
 } from '@ui-kitten/components';
@@ -14,6 +13,7 @@ import {ThemeContext} from '../../hooks/ThemeContext.tsx';
 
 interface TopNavigationAvatarProps {
     navigation: any;
+    renderItemAccessory: () => React.ReactElement;
 }
 
 const UserAvatar = (): React.ReactElement => (
@@ -37,8 +37,7 @@ const MoonIcon = (props: any): IconElement => (
     />
 );
 
-const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation }) => {
-    const themes = useTheme();
+const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation, renderItemAccessory }) => {
     const { theme, toggleTheme } = React.useContext(ThemeContext);
 
     const [themeIcon, setThemeIcon] = React.useState(theme === 'light' ? 'sun' : 'moon');
@@ -75,7 +74,7 @@ const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation })
     return (
         <TopNavigation
             title={renderAvatar}
-            accessoryRight={renderToggleTheme}
+            accessoryRight={renderItemAccessory}
         />
     );
 };

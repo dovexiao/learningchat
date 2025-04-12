@@ -2,9 +2,10 @@ import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import {NavigationProps} from '../../types/navigationType.tsx';
 import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
-import {Divider, Icon, Layout, Text, useTheme} from '@ui-kitten/components';
+import {Divider, Layout, Text, TopNavigationAction} from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
 import { AccessList } from '../../component/List';
+import * as CommonIcon from '../../component/Icon';
 
 const data = new Array(15).fill({
     title: '用户123',
@@ -13,32 +14,13 @@ const data = new Array(15).fill({
 });
 
 const ChatMain: React.FC<NavigationProps> = ({ navigation }) => {
-
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <TopNavigationAvatar
-                navigation={navigation}
-                // renderItemAccessory={renderItemAccessory}
-            />
-            <Divider />
-            <Layout style={{ flex: 1, alignItems: 'center'}}>
-                <MessageList navigation={navigation}/>
-            </Layout>
-        </SafeAreaView>
-    );
-};
-
-const MessageList: React.FC<NavigationProps> = ({ navigation }) => {
-
     const onMessageClick = (item: any) => {
         navigation.navigate('ChatSpace', { item });
     };
-    const themes = useTheme();
 
     const accessoryLeft = (): IconElement => (
-        <Icon
-            name="person"
-            fill={themes['color-primary-500']}
+        <TopNavigationAction
+            icon={CommonIcon.PersonIcon}
         />
     );
 
@@ -54,13 +36,26 @@ const MessageList: React.FC<NavigationProps> = ({ navigation }) => {
         </>
     );
 
+    const renderOpeAccessory = () => (
+        <></>
+    );
+
     return (
-        <AccessList
-            data={data}
-            accessoryLeft={accessoryLeft}
-            accessoryRight={accessoryRight}
-            onListItemClick={onMessageClick}
-        />
+        <SafeAreaView style={{ flex: 1 }}>
+            <TopNavigationAvatar
+                navigation={navigation}
+                renderItemAccessory={renderOpeAccessory}
+            />
+            <Divider />
+            <Layout style={{ flex: 1, alignItems: 'center'}}>
+                <AccessList
+                    data={data}
+                    accessoryLeft={accessoryLeft}
+                    accessoryRight={accessoryRight}
+                    onListItemClick={onMessageClick}
+                />
+            </Layout>
+        </SafeAreaView>
     );
 };
 

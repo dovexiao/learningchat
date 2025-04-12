@@ -1,11 +1,12 @@
 import React from 'react';
 import {Alert, SafeAreaView} from 'react-native';
-import {Divider, Layout, TopNavigationAction, useTheme} from '@ui-kitten/components';
+import {Divider, Layout, TopNavigationAction} from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
 import {NavigationProps} from '../../../types/navigationType.tsx';
 import {AccessList} from '../../../component/List';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';
 import * as CommonIcon from '../../../component/Icon';
+import {FileTextIcon} from "../../../component/Icon/FileTextIcon.tsx";
 
 const data = new Array(10).fill({
     title: '图形学之史',
@@ -22,7 +23,7 @@ const NoteLibrary: React.FC<NavigationProps> = ({ navigation, route}) => {
 
     const accessoryLeft = (): IconElement => (
         <TopNavigationAction
-            icon={CommonIcon.FileIcon}
+            icon={CommonIcon.FileTextIcon}
         />
     );
 
