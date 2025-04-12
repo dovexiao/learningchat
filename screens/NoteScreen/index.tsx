@@ -4,7 +4,7 @@ import { Alert, SafeAreaView } from 'react-native';
 import {NavigationProps} from '../../types/navigationType.tsx';
 import { Divider, Layout, TopNavigationAction } from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
-import { AccessList } from '../../component/List';
+import { BasicList } from '../../component/List/BasicList.tsx';
 import * as CommonIcon from '../../component/Icon';
 
 const data = new Array(10).fill({
@@ -43,7 +43,7 @@ const NoteMain: React.FC<NavigationProps> = ({ navigation }) => {
             />
             <Divider />
             <Layout style={{ flex: 1, alignItems: 'center'}}>
-                <AccessList
+                <BasicList
                     data={data}
                     accessoryLeft={accessoryLeft}
                     accessoryRight={accessoryRight}

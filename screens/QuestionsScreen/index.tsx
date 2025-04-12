@@ -4,7 +4,7 @@ import {Alert, SafeAreaView} from 'react-native';
 import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
 import {NavigationProps} from '../../types/navigationType.tsx';
 import * as CommonIcon from '../../component/Icon';
-import {AccessList} from '../../component/List';
+import {BasicList} from '../../component/List/BasicList.tsx';
 
 const data1 = new Array(10).fill({
     title: '题目集: 12345',
@@ -71,7 +71,7 @@ const QuestionLibraryList = ({ navigation }: NavigationProps): React.ReactElemen
     );
 
     return (
-        <AccessList
+        <BasicList
             data={data1}
             accessoryLeft={accessoryLeft}
             accessoryRight={accessoryRight}
@@ -99,7 +99,7 @@ const TestLibraryList = ({ navigation }: NavigationProps): React.ReactElement =>
     );
 
     return (
-        <AccessList
+        <BasicList
             data={data2}
             accessoryLeft={accessoryLeft}
             accessoryRight={accessoryRight}

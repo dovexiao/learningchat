@@ -15,7 +15,7 @@ interface ListProps {
     accessoryRight: (item: IListItem) => React.ReactElement;
 }
 
-export const AccessList: React.FC<ListProps> = ({ data, onListItemClick, accessoryLeft, accessoryRight }) => {
+export const BasicList = ({ data, onListItemClick, accessoryLeft, accessoryRight }: ListProps): React.ReactElement => {
     const themes = useTheme();
 
     const renderItem = ({ item, index }: { item: IListItem, index: number }) => (

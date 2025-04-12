@@ -3,7 +3,7 @@ import {Alert, SafeAreaView} from 'react-native';
 import {Divider, Layout, TopNavigationAction} from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
 import {NavigationProps} from '../../../types/navigationType.tsx';
-import {AccessList} from '../../../component/List';
+import {BasicList} from '../../../component/List/BasicList.tsx';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';
 import * as CommonIcon from '../../../component/Icon';
 
@@ -46,7 +46,7 @@ const QuestionLibrary: React.FC<NavigationProps> = ({ navigation, route}) => {
             />
             <Divider />
             <Layout style={{ flex: 1, alignItems: 'center'}}>
-                <AccessList
+                <BasicList
                     data={data}
                     accessoryLeft={accessoryLeft}
                     accessoryRight={accessoryRight}
