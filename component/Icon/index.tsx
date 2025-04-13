@@ -1,6 +1,6 @@
 export * from './SettingsIcon';
 export * from './MoreOpeIcon';
-export * from './PostIcon';
+export * from './SendIcon';
 export * from './PersonIcon';
 export * from './FolderIcon';
 export * from './FileIcon';
@@ -9,3 +9,5 @@ export * from './QuestionIcon';
 export * from './BasicOpeIcon';
 export * from './FileTextIcon';
 export * from './ListIcon';
+export * from './LikeIcon';
+export * from './ReviewIcon.tsx';

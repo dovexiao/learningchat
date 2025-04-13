@@ -97,7 +97,7 @@ const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
                         onChangeText={nextValue => setChatContent(nextValue)}
                     />
                 </View>
-                <View style={styles.postContainer}>
+                <View style={styles.sendContainer}>
                     {/*<Button*/}
                     {/*    size="small"*/}
                     {/*    onPress={() => {Alert.alert('发送');}}*/}
@@ -105,7 +105,7 @@ const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
                     {/*    发送*/}
                     {/*</Button>*/}
                     <TopNavigationAction
-                        icon={CommonIcon.PostIcon}
+                        icon={CommonIcon.SendIcon}
                         onPress={() => {Alert.alert('发送');}}
                     />
                 </View>
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     inputContainer: {
         flex: 1,
     },
-    postContainer: {
+    sendContainer: {
         marginLeft: 10,
     },
     opesContainer: {

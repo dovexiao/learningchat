@@ -11,11 +11,12 @@ import NoteLibrary from './NoteScreen/NoteLibrary';
 import Note from './NoteScreen/Note';
 import QuestionLibrary from './QuestionsScreen/QuestionLibrary';
 import TestLibrary from './QuestionsScreen/TestLibrary';
+import Post from "./ForumScreen/Post";
 
 const { Navigator, Screen } = createStackNavigator();
 
 const HomeNavigator = () => (
-    <Navigator initialRouteName="AppMain" screenOptions={{headerShown: false}}>
+    <Navigator initialRouteName="AppStart" screenOptions={{headerShown: false}}>
         <Screen name="AppStart" component={AppStart} />
         <Screen name="AppMain" component={AppMain} />
         <Screen name="AppLogin" component={AppLogin} />
@@ -26,6 +27,7 @@ const HomeNavigator = () => (
         <Screen name="Note" component={Note} initialParams={{item: null}} />
         <Screen name="QuestionLibrary" component={QuestionLibrary} initialParams={{item: null}} />
         <Screen name="TestLibrary" component={TestLibrary} initialParams={{item: null}} />
+        <Screen name="Post" component={Post} initialParams={{item: null}} />
     </Navigator>
 );
 
