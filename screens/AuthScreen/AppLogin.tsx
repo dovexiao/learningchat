@@ -10,6 +10,7 @@ import CaptchaInput from '../../component/Input/CaptchaInput.tsx';
 import * as api from '../../services/api/AuthApi.ts';
 import TokenManager from '../../services/auth/TokenManager.ts';
 import {errAlert} from '../../component/Alert/err.tsx';
+import {useAuth} from "../../hooks/AuthContext.tsx";
 
 const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
     const [username, setUsername] = React.useState('');
@@ -17,11 +18,13 @@ const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
     const [captchaKey, setCaptchaKey] = React.useState('');
     const [captchaText, setCaptchaTExt] = React.useState('');
     const [captchaSvg, setCaptchaSvg] = React.useState('');
+    const { setUser } = useAuth();
 
     const handleLogin = async () => {
        try {
-           const { accessToken, refreshToken } = await api.login(username, password, captchaKey, captchaText);
+           const { accessToken, refreshToken, user } = await api.login(username, password, captchaKey, captchaText);
            await TokenManager.setTokens(accessToken, refreshToken);
+           setUser(user);
            await navigation.navigate('AppMain');
        } catch (error) {
            errAlert(error);

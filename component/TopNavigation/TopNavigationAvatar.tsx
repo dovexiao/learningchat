@@ -10,6 +10,7 @@ import {
 } from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
 import {ThemeContext} from '../../hooks/ThemeContext.tsx';
+import {useAuth} from "../../hooks/AuthContext.tsx";
 
 interface TopNavigationAvatarProps {
     navigation: any;
@@ -38,15 +39,16 @@ const MoonIcon = (props: any): IconElement => (
 );
 
 const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation, renderItemAccessory }) => {
-    const { theme, toggleTheme } = React.useContext(ThemeContext);
+    // const { theme, toggleTheme } = React.useContext(ThemeContext);
+    const user = useAuth().getUser();
 
-    const [themeIcon, setThemeIcon] = React.useState(theme === 'light' ? 'sun' : 'moon');
-
-    const onThemeChange = (): void => {
-        const newThemeIcon = theme === 'light' ? 'moon' : 'sun';
-        setThemeIcon(newThemeIcon);
-        toggleTheme();
-    };
+    // const [themeIcon, setThemeIcon] = React.useState(theme === 'light' ? 'sun' : 'moon');
+    //
+    // const onThemeChange = (): void => {
+    //     const newThemeIcon = theme === 'light' ? 'moon' : 'sun';
+    //     setThemeIcon(newThemeIcon);
+    //     toggleTheme();
+    // };
 
     const handleGoPersonCenter = () => {
         navigation.navigate('PersonCenter');
@@ -56,20 +58,20 @@ const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation, r
         <View style={styles.titleContainer}>
             <TopNavigationAction icon={UserAvatar} onPress={handleGoPersonCenter} />
             <View style={styles.info}>
-                <Text category="h6">用户123</Text>
+                <Text category="h6">用户{user.username}</Text>
                 <Text appearance="hint" category="c1" status="success">强网络</Text>
             </View>
         </View>
     );
 
-    const renderToggleTheme = (): React.ReactElement => (
-        <Button
-            status="primary"
-            accessoryLeft={themeIcon === 'sun' ? SunIcon : MoonIcon}
-            appearance="ghost"
-            onPress={onThemeChange}
-        />
-    );
+    // const renderToggleTheme = (): React.ReactElement => (
+    //     <Button
+    //         status="primary"
+    //         accessoryLeft={themeIcon === 'sun' ? SunIcon : MoonIcon}
+    //         appearance="ghost"
+    //         onPress={onThemeChange}
+    //     />
+    // );
 
     return (
         <TopNavigation

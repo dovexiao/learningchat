@@ -17,9 +17,9 @@ export const refreshAllToken = async (api: AxiosInstance ) => {
         return undefined;
     }
     try {
-        const { accessToken, refreshToken } = await refreshTokenFn(api, rfToken);
+        const { accessToken, refreshToken, user } = await refreshTokenFn(api, rfToken);
         await setTokens(accessToken, refreshToken);
-        return { accessToken, refreshToken };
+        return user;
     } catch (error) {
         throw error;
     }
