@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ENV_CONFIG from '../../config/env.config.ts';
-import { getAccessToken, refreshAllToken } from './utils.ts';
+import { getAccessToken, refreshAllToken } from '../auth/utils.ts';
 
 const api = axios.create({
     baseURL: ENV_CONFIG.API_BASE,
@@ -37,7 +37,7 @@ api.interceptors.response.use((response) => {
     return response;
 }, async (resError) => {
     try {
-        if (resError.response?.status === 401 && resError.response.data?.error?.details !== 'EXPIRED_REFRESH') {
+        if (resError.response.status === 401 && resError.response.data?.error?.details === 'EXPIRED_TOKEN') {
             await refreshAllToken(api);
             return api.request(resError.config);
         }

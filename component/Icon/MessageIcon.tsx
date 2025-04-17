@@ -2,15 +2,15 @@ import {Icon, useTheme} from '@ui-kitten/components';
 import type {IconElement} from '@ui-kitten/components';
 import React from 'react';
 
-const MoreOpeIcon = (props: any): IconElement => {
+const MessageIcon = (props: any): IconElement => {
     const themes = useTheme();
     return (
         <Icon
             {...props}
-            name="more-horizontal-outline"
+            name="message-circle-outline"
             fill={themes['color-primary-500']}
         />
     );
 };
 
-export { MoreOpeIcon };
+export { MessageIcon };

@@ -81,7 +81,7 @@ const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
         <SafeAreaView style={{ flex: 1 }}>
             <TopNavigationOpe navigation={navigation} renderItemAccessory={renderRightActions} title={MessageItem.title} />
             <Divider />
-            <Layout style={{ flex: 1, alignItems: 'center'}}>
+            <Layout style={{ flex: 1, alignItems: 'center' }}>
                 <List
                     style={styles.container}
                     data={data}
@@ -92,18 +92,13 @@ const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
             <View style={[styles.opeContainer, { backgroundColor: themes['background-basic-color-1']}]}>
                 <View style={styles.inputContainer}>
                     <Input
-                        placeholder="enter"
+                        style={styles.input}
+                        placeholder="听我说..."
                         value={chatContent}
                         onChangeText={nextValue => setChatContent(nextValue)}
                     />
                 </View>
                 <View style={styles.sendContainer}>
-                    {/*<Button*/}
-                    {/*    size="small"*/}
-                    {/*    onPress={() => {Alert.alert('发送');}}*/}
-                    {/*>*/}
-                    {/*    发送*/}
-                    {/*</Button>*/}
                     <TopNavigationAction
                         icon={CommonIcon.SendIcon}
                         onPress={() => {Alert.alert('发送');}}
@@ -111,7 +106,7 @@ const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
                 </View>
                 <View style={styles.opesContainer}>
                     <TopNavigationAction
-                        icon={CommonIcon.MoreOpeIcon}
+                        icon={CommonIcon.MoreSelectIcon}
                         onPress={() => {Alert.alert('更多');}}
                     />
                 </View>
@@ -165,6 +160,11 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         flex: 1,
+    },
+    input: {
+        backgroundColor: '#f5f5f5',
+        borderRadius: 20,
+        borderWidth: 0
     },
     sendContainer: {
         marginLeft: 10,

@@ -9,6 +9,7 @@ const LikeIcon = (props: any): IconElement => {
             {...props}
             name="heart-outline"
             fill={themes['color-primary-500']}
+            // fill={'#757575'}
         />
     );
 };

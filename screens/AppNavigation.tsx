@@ -12,6 +12,9 @@ import Note from './NoteScreen/Note';
 import QuestionLibrary from './QuestionsScreen/QuestionLibrary';
 import TestLibrary from './QuestionsScreen/TestLibrary';
 import Post from "./ForumScreen/Post";
+import Comment from "./ForumScreen/Comment";
+import PostTI from "./ForumScreen/PostTI";
+import PostTags from "./ForumScreen/PostTags";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -28,6 +31,9 @@ const HomeNavigator = () => (
         <Screen name="QuestionLibrary" component={QuestionLibrary} initialParams={{item: null}} />
         <Screen name="TestLibrary" component={TestLibrary} initialParams={{item: null}} />
         <Screen name="Post" component={Post} initialParams={{item: null}} />
+        <Screen name="Comment" component={Comment} initialParams={{comment: null}} />
+        <Screen name="PostTI" component={PostTI} />
+        <Screen name="PostTags" component={PostTags} initialParams={{text: null, images: null}} />
     </Navigator>
 );
 
