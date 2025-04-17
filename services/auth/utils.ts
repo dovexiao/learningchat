@@ -40,3 +40,12 @@ export const setTokens = async (accessToken: string, refreshToken: string) => {
         throw error;
     }
 };
+
+// 清空缓存
+export const clearTokens = async () => {
+    try {
+        await keychain.clearTokens();
+    } catch (error) {
+        throw error;
+    }
+};

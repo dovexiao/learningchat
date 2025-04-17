@@ -1,4 +1,4 @@
-import {getAccessToken, refreshAllToken, setTokens} from '../api/utils.ts';
+import {getAccessToken, refreshAllToken, setTokens, clearTokens} from './utils.ts';
 import api from '../api/axios.ts';
 
 class TokenManager {
@@ -19,6 +19,14 @@ class TokenManager {
     async setTokens(accessToken: string, refreshToken: string) {
         try {
             await setTokens(accessToken, refreshToken);
+        } catch (error) {
+            throw error;
+        }
+    }
+    // 清空缓存
+    async clearTokens() {
+        try {
+            await clearTokens();
         } catch (error) {
             throw error;
         }

@@ -10,7 +10,7 @@ import CaptchaInput from '../../component/Input/CaptchaInput.tsx';
 import * as api from '../../services/api/AuthApi.ts';
 import TokenManager from '../../services/auth/TokenManager.ts';
 import {errAlert} from '../../component/Alert/err.tsx';
-import {useAuth} from "../../hooks/AuthContext.tsx";
+import {useAuth} from '../../hooks/AuthContext.tsx';
 
 const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
     const [username, setUsername] = React.useState('');
@@ -75,16 +75,20 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     inputContainer: {
-        flex: 1,
+        // flex: 1,
+        // height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        paddingTop: 30,
+        // backgroundColor: 'blue',
     },
     thirdPartyContainer: {
-        height: 100,
+        height: '20%',
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
+        // backgroundColor: 'red'
     },
 });
 

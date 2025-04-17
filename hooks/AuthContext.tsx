@@ -3,7 +3,7 @@ import TokenManager from '../services/auth/TokenManager.ts';
 import {errAlert} from '../component/Alert/err.tsx';
 
 type User = {
-    userId: string;
+    userId: number;
     username: string;
 };
 
@@ -16,7 +16,7 @@ type AuthContextType = {
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-    const [userId, setUserId] = React.useState<string>('');
+    const [userId, setUserId] = React.useState<number>(0);
     const [username, setUsername] = React.useState('');
     const [isTokenExpired, setIsTokenExpired] = React.useState<boolean | undefined>(undefined);
 
@@ -40,7 +40,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
                 } else {
                     setIsTokenExpired(false);
                 }
-            } catch (error) {
+            } catch (error: any) {
+                if (error?.response && error.response.status === 401 && error.response.data.error.details.code === 'INVALID_TOKEN') {
+                    await TokenManager.clearTokens();
+                    setIsTokenExpired(false);
+                }
                 errAlert(error);
             }
         })();

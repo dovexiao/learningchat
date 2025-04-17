@@ -38,3 +38,15 @@ export const getRefreshToken = async () => {
         throw error;
     }
 };
+
+// 清空存储的 access 和 refresh token
+export const clearTokens = async () => {
+    try {
+        await Promise.all([
+            Keychain.resetGenericPassword({ service: 'auth_access' }),
+            Keychain.resetGenericPassword({ service: 'auth_refresh' }),
+        ]);
+    } catch (error) {
+        throw error;
+    }
+};

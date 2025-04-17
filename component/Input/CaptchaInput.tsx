@@ -34,6 +34,7 @@ const CaptchaInput = ({ value, setValue, captchaSvg, handleCaptcha }: InputProps
 
     return (
         <Input
+            style={styles.input}
             value={value}
             label={renderLabel}
             placeholder="请输入..."
@@ -44,6 +45,9 @@ const CaptchaInput = ({ value, setValue, captchaSvg, handleCaptcha }: InputProps
 };
 
 const styles = StyleSheet.create({
+    input: {
+        marginBottom: 20,
+    },
     label: {
         fontSize: 15,
         fontWeight: 'bold',
