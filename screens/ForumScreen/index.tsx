@@ -1,6 +1,6 @@
 import {Divider, Layout, Tab, TabBar, TopNavigationAction, Text, useTheme} from '@ui-kitten/components';
 import React from 'react';
-import {Image, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, Pressable, SafeAreaView, StyleSheet, View} from 'react-native';
 import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
 import {NavigationProps} from '../../types/navigationType.tsx';
 import * as CommonIcon from '../../component/Icon';
@@ -9,6 +9,8 @@ import * as CommonIcons from '../../component/Icon';
 import {useAuth} from '../../hooks/AuthContext.tsx';
 import * as api from '../../services/api/ForumApi';
 import {errAlert} from '../../component/Alert/err.tsx';
+import FastImage from 'react-native-fast-image';
+import ContentLoader, {Rect} from 'react-content-loader/native';
 
 type ImageItem = {
     type: string | undefined;
@@ -29,36 +31,91 @@ type Post = {
     nickname: string;
 };
 
-const data2 = new Array(10).fill({
-    content: '题目集: 12345',
-    tags: '前端,后端,测试',
-    username: '123',
-    cover: '封面',
-    Likes: 10,
-});
+const { width: screenWidth } = Dimensions.get('window');
 
 const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
-    const [postData, setPostData] = React.useState<Post[]>([]);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const themes = useTheme();
     const { userId } = useAuth().getUser();
-
-    const handleListItemClick = (item: any) => {
-        navigation.navigate('Post', { item });
-    };
 
     const handleAddPostClick = () => {
         navigation.navigate('PostTI');
     };
 
-    const getPosts = React.useCallback(async () => {
+    const getNextPosts = async () => {
         try {
             const { posts } = await api.getPosts(userId);
-            setPostData(posts);
+            return posts.map((post: Post) => ({
+                ...post,
+                navigation: navigation,
+            }));
         } catch (error) {
             errAlert(error);
         }
-    }, [userId]);
+    };
+
+    const estimateListItemHeight = (item: any, index: number) => {
+        const width = (screenWidth  - 40) / 2;
+
+        let totalHeight = Number(0);
+
+        let imageHeight = Number(0);
+        if (item.cover && item.cover.base64) {
+            const coverWidth = item.cover.width;
+            const coverHeight = item.cover.height;
+            const aspectRatio = Math.max(coverWidth / coverHeight, 0.8);
+            // console.log(`cover${index} :`, coverWidth, coverHeight);
+            // console.log(`aspectRatio${index} :`, aspectRatio);
+            imageHeight = width / aspectRatio;
+            // console.log(`imageView${index}高度 :`, imageHeight);
+            totalHeight += imageHeight;
+        }
+
+        const fontSize = Number(16);
+        const lineHeight = Number(24);
+        const avgCharWidth = fontSize / 2;
+        const maxCharsPerLine = (width - 20) / avgCharWidth;
+        const text = item.content.trim();
+        let totalLines = Number(0);
+        let currentLineChars = 0;
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === '\n') {
+                totalLines++;
+                currentLineChars = 0;
+            } else {
+                currentLineChars++;
+                if (currentLineChars > maxCharsPerLine) {
+                    totalLines++;
+                    currentLineChars = 1; // 当前行的第一个字符
+                }
+            }
+        }
+        if (currentLineChars > 0) {
+            totalLines++;
+        }
+        const textViewPaddingVertical = Number(10);
+        const textViewHeight = totalLines * lineHeight + textViewPaddingVertical;
+        // console.log(`textView${index}高度 :`, textViewHeight);
+        // totalHeight += textViewHeight;
+        totalHeight += textViewPaddingVertical + lineHeight;
+
+        const tagsViewHeight = Number(item.tags.length !== 0 ? 31 : 0);
+        // console.log(`tagsView${index}高度 :`, tagsViewHeight);
+        totalHeight += tagsViewHeight;
+
+        const metaViewHeight = Number(44);
+        // console.log(`metaView${index}高度 :`, metaViewHeight);
+        totalHeight += metaViewHeight;
+
+        return {
+            width,
+            totalHeight,
+            imageHeight,
+            textViewHeight,
+            tagsViewHeight,
+            metaViewHeight,
+        };
+    };
 
     const renderOpeAccessory = () => (
         <View style={{ flexDirection: 'row' }} >
@@ -77,12 +134,6 @@ const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
         </View>
     );
 
-    React.useEffect(() => {
-        (async () => {
-            await getPosts();
-        })();
-    }, [getPosts]);
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <TopNavigationAvatar
@@ -98,37 +149,36 @@ const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
                 <Tab title="关注" style={{height: 40}} />
             </TabBar>
             <Layout style={{ flex: 1, backgroundColor: themes['background-basic-color-2']}}>
-                {
-                    selectedIndex === 0 ?
-                        <DoubleColWaterfallList
-                            data={postData}
-                            onListItemClick={handleListItemClick}
-                            renderListItem={renderListItem}
-                        /> :
-                        selectedIndex === 1 ?
-                            <DoubleColWaterfallList
-                                data={data2}
-                                onListItemClick={handleListItemClick}
-                                renderListItem={renderListItem}
-                            /> :
-                            <></>
-                }
+                <View style={{ flex: 1, display: selectedIndex === 0 ? 'flex' : 'none' }}>
+                    <DoubleColWaterfallList
+                        renderListItem={RenderListItem}
+                        getNextPageData={getNextPosts}
+                        estimateListItemHeight={estimateListItemHeight}
+                    />
+                </View>
             </Layout>
         </SafeAreaView>
     );
 };
 
-const renderListItem = (item: any): React.ReactElement => {
+const RenderListItem = ({ item, index }: { item: any, index: number }): React.ReactElement => {
+    if (!item) {
+        return (
+            <View style={styles.container}>
+                <SkeletonItem imageHeight={220} width={(screenWidth  - 40) / 2} />
+            </View>
+        );
+    }
     const hasCover = item.cover && item.cover.base64;
     let imageStyle = {};
     let imageContainerStyle = {};
 
     if (hasCover) {
         const { width, height } = item.cover;
-        const aspectRatio = width && height ? width / height : 0.7; // 默认宽高比
+        const aspectRatio = width && height ? width / height : 0.8; // 默认宽高比
 
-        // 图片宽高比小于0.7（图片更高），超出部分遮蔽
-        if (aspectRatio < 0.7) {
+        // 图片宽高比小于0.8（图片更高），超出部分遮蔽
+        if (aspectRatio < 0.8) {
             imageStyle = {
                 width: '100%',
                 height: undefined,
@@ -137,11 +187,11 @@ const renderListItem = (item: any): React.ReactElement => {
             };
             imageContainerStyle = {
                 width: '100%',
-                aspectRatio: 0.7, // 保持容器宽高比
+                aspectRatio: 0.8, // 保持容器宽高比
                 overflow: 'hidden', // 超出部分隐藏
             };
         }
-        // 图片宽高比大于0.7（视图更高），按图片实际宽高比显示
+        // 图片宽高比大于0.8（视图更高），按图片实际宽高比显示
         else {
             imageStyle = {
                 width: '100%',
@@ -156,93 +206,184 @@ const renderListItem = (item: any): React.ReactElement => {
         }
     }
 
+    const handleListItemClick = () => {
+        item.navigation.navigate('Post', { item });
+    };
+
     return (
-        <View style={styles.container}>
-            {hasCover ? (
-                <View style={[styles.imageContainer, imageContainerStyle]}>
-                    <Image
-                        source={{ uri: `data:image/jpeg;base64,${item?.cover.base64}` }}
-                        style={imageStyle}
-                    />
-                </View>
-            ) : null}
-            {/*<View style={styles.imageContainer}>*/}
-            {/*    <Text style={styles.imagePlaceholder}>图片占位</Text>*/}
+        <View style={{ position: 'relative' }}>
+            {/*<View style={{position: 'absolute', top: 0, left: 0, zIndex: -1}}>*/}
+            {/*    <SkeletonItem  height={item.listItemViewHeights.imageHeight} width={item.listItemViewHeights.width}/>*/}
             {/*</View>*/}
-            <View style={styles.contentContainer}>
-                <Text numberOfLines={3} ellipsizeMode={'tail'}>{item?.content}</Text>
-            </View>
-            <View style={styles.tagsContainer}>
-                {item?.tags && item?.tags.map((tag: string, index: number) => (
-                    <View key={index} style={styles.tagItem}>
-                        <Text style={styles.tagText}># {tag}</Text>
+            <Pressable onPress={handleListItemClick}>
+                <View
+                    style={styles.container}
+                    // onLayout={(event) => {
+                    //     const { height, width } = event.nativeEvent.layout;
+                    //     console.log(`container${index}可见高度:`, height);
+                    //     console.log(`container${index}可见宽度:`, width);
+                    // }}
+                >
+                    {hasCover ?
+                        <View
+                            style={[styles.imageContainer, imageContainerStyle]}
+                            // onLayout={(event) => {
+                            //     const { height, width } = event.nativeEvent.layout;
+                            //     console.log(`image${index}可见高度（垂直列表）:`, height);
+                            //     console.log(`image${index}可见宽度（水平列表）:`, width);
+                            // }}
+                        >
+                            <FastImage
+                                source={{
+                                    uri: `data:image/jpeg;base64,${item?.cover.base64}`,
+                                    priority: FastImage.priority.normal,
+                                }}
+                                style={imageStyle}
+                                resizeMode={FastImage.resizeMode.contain}
+                            />
+                        </View>
+                        : null}
+                    <View
+                        style={styles.textContainer}
+                        // onLayout={(event) => {
+                        //     const { height, width } = event.nativeEvent.layout;
+                        //     console.log(`text${index}可见高度（垂直列表）:`, height);
+                        //     console.log(`text${index}可见宽度（水平列表）:`, width);
+                        // }}
+                    >
+                        <Text
+                            numberOfLines={1}
+                            ellipsizeMode={'tail'}
+                            style={{ lineHeight: 24, fontSize: 16 }}
+                        >
+                            {item?.content}
+                        </Text>
                     </View>
-                ))}
-            </View>
-            <View style={styles.metaContainer}>
-                <View style={styles.metaIconText}>
-                    <TopNavigationAction
-                        icon={CommonIcon.PersonIcon}
-                    />
-                    <Text>{item?.nickname ? item?.nickname : `用户 ${item?.username}`}</Text>
+                    <View
+                        style={styles.tagsContainer}
+                        // onLayout={(event) => {
+                        //     const { height, width } = event.nativeEvent.layout;
+                        //     console.log(`tags${index}可见高度（垂直列表）:`, height);
+                        //     console.log(`tags${index}可见宽度（水平列表）:`, width);
+                        // }}
+                    >
+                        {item?.tags && item?.tags.filter((tag: string) => tag.length < 5).slice(0, 2).map((tag: string, index: number) =>
+                            <View key={index} style={styles.tagItem}>
+                                <Text style={styles.tagText}># {tag}</Text>
+                            </View>
+                        )}
+                    </View>
+                    <View
+                        style={styles.metaContainer}
+                        // onLayout={(event) => {
+                        //     const { height, width } = event.nativeEvent.layout;
+                        //     console.log(`meta${index}可见高度（垂直列表）:`, height);
+                        //     console.log(`meta${index}可见宽度（水平列表）:`, width);
+                        // }}
+                    >
+                        <View style={[styles.metaIconText, {flex: 1}]}>
+                            <TopNavigationAction
+                                style={styles.metaIcon}
+                                icon={CommonIcon.PersonIcon}
+                            />
+                            <Text style={[styles.metaText, {flex: 1}]} numberOfLines={1} ellipsizeMode={'tail'}>{item?.nickname ? item?.nickname : `用户${item?.username}`}</Text>
+                        </View>
+                        <View style={styles.metaIconText}>
+                            <TopNavigationAction
+                                style={styles.metaIcon}
+                                icon={CommonIcon.LikeIcon}
+                            />
+                            <Text style={styles.metaText}>{item?.likes}</Text>
+                        </View>
+                    </View>
                 </View>
-                <View style={styles.metaIconText}>
-                    <TopNavigationAction
-                        icon={CommonIcon.LikeIcon}
-                    />
-                    <Text>{item?.likes}</Text>
-                </View>
-            </View>
+            </Pressable>
         </View>
     );
 };
 
+const SkeletonItem = ({width, imageHeight}: {width: number, imageHeight: number}) => (
+    <ContentLoader
+        speed={1.2}  // 动画速度
+        backgroundColor="#f3f3f3"  // 背景色
+        foregroundColor="#ecebeb"  // 前景色
+        width={width}
+        height={imageHeight + 109}
+        viewBox={`0 0 ${width} ${imageHeight + 109}`}  // 视口宽高（需计算实际尺寸）
+    >
+        {/* 主图 */}
+        <Rect x="0" y="0" rx="10" ry="10" width="100%" height={imageHeight} />
+
+        {/* 第一行文本 */}
+        <Rect x="0" y={imageHeight + 10} rx="4" ry="4" width="100%" height="24" />
+
+        {/* 第二行文本（稍短） */}
+        <Rect x="0" y={imageHeight + 44} rx="4" ry="4" width="100%" height="21" />
+
+        {/* 第三行文本 */}
+        <Rect x="0" y={imageHeight + 75} rx="4" ry="4" width="100%" height="24" />
+    </ContentLoader>
+);
+
 const styles = StyleSheet.create({
     container: {
+        // width: '100%',
         borderRadius: 10,
         backgroundColor: '#fff',
         marginHorizontal: 5,
-        marginBottom: 10,
+        marginVertical: 5,
         overflow: 'hidden',
     },
     imageContainer: {
-        width: '100%',
-        aspectRatio: 0.7,
+        aspectRatio: 0.8,
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#f0f0f0',
     },
     imagePlaceholder: {
         color: '#999',
         fontSize: 16,
     },
-    contentContainer: {
-        marginVertical: 10,
+    textContainer: {
+        // marginVertical: 10,
         paddingHorizontal: 10,
+        paddingTop: 10,
     },
     tagsContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         paddingHorizontal: 10,
-        // marginVertical: 10
+        // flexWrap: 'nowrap',
+        overflow: 'hidden',
     },
     tagItem: {
         backgroundColor: '#e1f5fe',
         borderRadius: 5,
-        paddingVertical: 4,
-        marginRight: 8,
+        padding: 4,
+        marginVertical: 4,
+        marginRight: 5,
     },
     tagText: {
         color: '#039be5',
-        fontSize: 12,
+        fontSize: 11,
     },
     metaContainer: {
+        width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         // paddingHorizontal: 10,
+        paddingVertical: 10,
         paddingRight: 10,
-        marginVertical: 10,
     },
     metaIconText: {
         flexDirection: 'row',
+        alignItems: 'center',
+    },
+    metaIcon: {
+        width: 18,
+    },
+    metaText: {
+        fontSize: 11,
     },
 });
 
