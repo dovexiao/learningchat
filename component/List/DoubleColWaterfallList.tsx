@@ -2,10 +2,10 @@ import React from 'react';
 import {Animated, Dimensions, StyleSheet, View} from 'react-native';
 import {CellContainer, MasonryFlashList} from '@shopify/flash-list';
 import {Spinner, Text} from '@ui-kitten/components';
-import ContentLoader, {Rect} from 'react-content-loader/native';
 import {FadeIn, FadeOut} from 'react-native-reanimated';
 
 type WaterfallListProps = {
+    skeletonItem: () => React.ReactElement;
     renderListItem: ({item, index}: { item: any, index: number }) => React.ReactElement
     getNextPageData: () => Promise<any>;
     estimateListItemHeight: (item: any, index: number) => any;
@@ -61,7 +61,7 @@ const crossGrouping = (data: any[], firstData: any[], secondData: any[]): any[] 
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const DoubleColWaterfallList = ({ renderListItem, getNextPageData, estimateListItemHeight }: WaterfallListProps): React.ReactElement => {
+const DoubleColWaterfallList = ({ skeletonItem, renderListItem, getNextPageData, estimateListItemHeight }: WaterfallListProps): React.ReactElement => {
     const [data, setData] = React.useState<any>([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [isEmpty, setIsEmpty] = React.useState(false);
@@ -152,6 +152,7 @@ const DoubleColWaterfallList = ({ renderListItem, getNextPageData, estimateListI
         });
 
         let newData = await getNextPageData();
+        // console.log(newData);
         newData = newData.map((item: any, index: number) => {
             return {
                 ...item,
@@ -199,10 +200,9 @@ const DoubleColWaterfallList = ({ renderListItem, getNextPageData, estimateListI
                 exiting={FadeOut.duration(200)}
                 ref={ref}
             >
-                {/*<SkeletonItem />*/}
                 {/*{data[props.index] ?*/}
                 {/*    props.children :*/}
-                {/*    <View style={{marginHorizontal: 5, marginVertical: 5}}><SkeletonItem imageHeight={220} width={(screenWidth  - 40) / 2} /></View>*/}
+                {/*    skeletonItem()*/}
                 {/*}*/}
             </AnimatedCellContainer>
         );
@@ -235,7 +235,7 @@ const DoubleColWaterfallList = ({ renderListItem, getNextPageData, estimateListI
             ListFooterComponentStyle={{}}
             extraData={{}}      // 额外数据，用于列表项更新时重新渲染
             onEndReached={loadMore}     // 触底回调
-            onEndReachedThreshold={0.5}     // 触底阈值
+            onEndReachedThreshold={0.1}     // 触底阈值
             onRefresh={onRefresh}
             refreshing={refreshingLoading}
             overrideItemLayout={(layout, item) => {

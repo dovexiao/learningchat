@@ -5,6 +5,6 @@ export const errAlert = (error: any) => {
     if (error?.response) {
         errorMessage += `\n${error.response.data.message}`;
     }
-    console.log(JSON.stringify(error));
+    console.log(error);
     Alert.alert('Error', errorMessage);
 };
