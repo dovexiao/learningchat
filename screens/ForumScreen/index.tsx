@@ -1,6 +1,16 @@
-import {Divider, Layout, Tab, TabBar, TopNavigationAction, Text, useTheme} from '@ui-kitten/components';
+import {
+    Divider,
+    Layout,
+    Tab,
+    TabBar,
+    TopNavigationAction,
+    Text,
+    useTheme,
+    Icon,
+    ViewPager
+} from '@ui-kitten/components';
 import React from 'react';
-import {Dimensions, Image, Pressable, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, Pressable, SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
 import {NavigationProps} from '../../types/navigationType.tsx';
 import * as CommonIcon from '../../component/Icon';
@@ -11,6 +21,7 @@ import * as api from '../../services/api/ForumApi';
 import {errAlert} from '../../component/Alert/err.tsx';
 import FastImage from 'react-native-fast-image';
 import ContentLoader, {Rect} from 'react-content-loader/native';
+import {saveBase64ToFile} from "../../services/storage/Base64ImageCache.ts";
 
 type ImageItem = {
     type: string | undefined;
@@ -42,18 +53,35 @@ const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
         navigation.navigate('PostTI');
     };
 
+    // 获取下一页帖子数据
     const getNextPosts = async () => {
         try {
             const { posts } = await api.getPosts(userId);
-            return posts.map((post: Post) => ({
-                ...post,
-                navigation: navigation,
+            console.log(posts);
+            return await Promise.all(posts.map(async (post: Post) => {
+                let path = '';
+                if (post.cover && post.cover.base64) {
+                    path = await saveBase64ToFile(post.cover.base64);
+                }
+                console.log(path);
+                return {
+                    ...post,
+                    cover: {
+                        localPath: path,
+                        type: post.cover?.type,
+                        width: post.cover?.width,
+                        height: post.cover?.height,
+                        base64: !(!post.cover?.base64),
+                    },
+                    navigation: navigation,
+                }
             }));
         } catch (error) {
             errAlert(error);
         }
     };
 
+    // 估计列表项高度
     const estimateListItemHeight = (item: any, index: number) => {
         const width = (screenWidth  - 40) / 2;
 
@@ -141,35 +169,71 @@ const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
                 renderItemAccessory={renderOpeAccessory}
             />
             <Divider />
-            <TabBar
+            <View style={styles.tabContainer}>
+                <TouchableOpacity
+                    onPress={() => setSelectedIndex(0)}
+                    activeOpacity={0.7}
+                >
+                    <Text style={[
+                        styles.tabText,
+                        selectedIndex === 0 ? styles.activeTab : styles.inactiveTab
+                    ]}>
+                        推荐
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.tabItem}
+                    onPress={() => setSelectedIndex(1)}
+                    activeOpacity={0.7}
+                >
+                    <Text style={[
+                        styles.tabText,
+                        selectedIndex === 1 ? styles.activeTab : styles.inactiveTab
+                    ]}>
+                        关注
+                    </Text>
+                </TouchableOpacity>
+            </View>
+            <ViewPager
+                style={{ flex: 1 }}
                 selectedIndex={selectedIndex}
+                swipeEnabled={true}
                 onSelect={index => setSelectedIndex(index)}
             >
-                <Tab title="推荐" style={{height: 40}} />
-                <Tab title="关注" style={{height: 40}} />
-            </TabBar>
-            <Layout style={{ flex: 1, backgroundColor: themes['background-basic-color-2']}}>
-                <View style={{ flex: 1, display: selectedIndex === 0 ? 'flex' : 'none' }}>
-                    <DoubleColWaterfallList
-                        renderListItem={RenderListItem}
-                        getNextPageData={getNextPosts}
-                        estimateListItemHeight={estimateListItemHeight}
-                    />
-                </View>
-            </Layout>
+                <Layout style={{ flex: 1, backgroundColor: themes['background-basic-color-2']}}>
+                    <View style={{ flex: 1, display: selectedIndex === 0 ? 'flex' : 'none' }}>
+                        <DoubleColWaterfallList
+                            skeletonItem={skeletonItem}
+                            renderListItem={RenderListItem}
+                            getNextPageData={getNextPosts}
+                            estimateListItemHeight={estimateListItemHeight}
+                        />
+                    </View>
+                </Layout>
+                <Text>123</Text>
+            </ViewPager>
+
         </SafeAreaView>
     );
 };
 
+const skeletonItem = (): React.ReactElement => (
+    <View style={[styles.container, {backgroundColor: 'inherit'}]}>
+        <SkeletonPlaceholder imageHeight={140} width={(screenWidth  - 40) / 2} />
+    </View>
+);
+
+// 列表项render函数
 const RenderListItem = ({ item, index }: { item: any, index: number }): React.ReactElement => {
     if (!item) {
         return (
-            <View style={styles.container}>
-                <SkeletonItem imageHeight={220} width={(screenWidth  - 40) / 2} />
-            </View>
+            <>
+                {skeletonItem()}
+            </>
         );
     }
-    const hasCover = item.cover && item.cover.base64;
+
+    const hasCover = item.cover && item.cover.localPath;
     let imageStyle = {};
     let imageContainerStyle = {};
 
@@ -234,15 +298,16 @@ const RenderListItem = ({ item, index }: { item: any, index: number }): React.Re
                             // }}
                         >
                             <FastImage
+                                style={imageStyle}
                                 source={{
-                                    uri: `data:image/jpeg;base64,${item?.cover.base64}`,
+                                    uri: `file://${item.cover.localPath}`,
                                     priority: FastImage.priority.normal,
                                 }}
-                                style={imageStyle}
                                 resizeMode={FastImage.resizeMode.contain}
                             />
                         </View>
-                        : null}
+                        : null
+                    }
                     <View
                         style={styles.textContainer}
                         // onLayout={(event) => {
@@ -282,17 +347,17 @@ const RenderListItem = ({ item, index }: { item: any, index: number }): React.Re
                         // }}
                     >
                         <View style={[styles.metaIconText, {flex: 1}]}>
-                            <TopNavigationAction
-                                style={styles.metaIcon}
-                                icon={CommonIcon.PersonIcon}
-                            />
+                            {/*<TopNavigationAction*/}
+                            {/*    style={styles.metaIcon}*/}
+                            {/*    icon={CommonIcon.PersonIcon}*/}
+                            {/*/>*/}
                             <Text style={[styles.metaText, {flex: 1}]} numberOfLines={1} ellipsizeMode={'tail'}>{item?.nickname ? item?.nickname : `用户${item?.username}`}</Text>
                         </View>
                         <View style={styles.metaIconText}>
-                            <TopNavigationAction
-                                style={styles.metaIcon}
-                                icon={CommonIcon.LikeIcon}
-                            />
+                            {/*<TopNavigationAction*/}
+                            {/*    style={styles.metaIcon}*/}
+                            {/*    icon={CommonIcon.LikeIcon}*/}
+                            {/*/>*/}
                             <Text style={styles.metaText}>{item?.likes}</Text>
                         </View>
                     </View>
@@ -302,7 +367,8 @@ const RenderListItem = ({ item, index }: { item: any, index: number }): React.Re
     );
 };
 
-const SkeletonItem = ({width, imageHeight}: {width: number, imageHeight: number}) => (
+// 骨架屏占位
+const SkeletonPlaceholder = ({width, imageHeight}: {width: number, imageHeight: number}) => (
     <ContentLoader
         speed={1.2}  // 动画速度
         backgroundColor="#f3f3f3"  // 背景色
@@ -315,17 +381,41 @@ const SkeletonItem = ({width, imageHeight}: {width: number, imageHeight: number}
         <Rect x="0" y="0" rx="10" ry="10" width="100%" height={imageHeight} />
 
         {/* 第一行文本 */}
-        <Rect x="0" y={imageHeight + 10} rx="4" ry="4" width="100%" height="24" />
+        <Rect x="0" y={imageHeight + 5} rx="4" ry="4" width="100%" height="24" />
 
         {/* 第二行文本（稍短） */}
-        <Rect x="0" y={imageHeight + 44} rx="4" ry="4" width="100%" height="21" />
+        <Rect x="0" y={imageHeight + 39} rx="4" ry="4" width="100%" height="21" />
 
         {/* 第三行文本 */}
-        <Rect x="0" y={imageHeight + 75} rx="4" ry="4" width="100%" height="24" />
+        <Rect x="0" y={imageHeight + 70} rx="4" ry="4" width="100%" height="24" />
     </ContentLoader>
 );
 
 const styles = StyleSheet.create({
+    tabContainer: {
+        flexDirection: 'row',
+        // justifyContent: 'center',
+        alignItems: 'flex-end',
+        paddingTop: 10,
+        paddingBottom: 5,
+        paddingHorizontal: 20,
+        backgroundColor: '#fff'
+    },
+    tabItem: {
+        marginHorizontal: 20,
+    },
+    tabText: {
+        // 默认样式
+        fontWeight: '500',
+    },
+    activeTab: {
+        fontSize: 25,
+        // color: '#FF4500',    // 选中颜色
+    },
+    inactiveTab: {
+        fontSize: 20,
+        color: '#666',       // 未选中颜色
+    },
     container: {
         // width: '100%',
         borderRadius: 10,
@@ -381,6 +471,7 @@ const styles = StyleSheet.create({
     },
     metaIcon: {
         width: 18,
+        height: 18,
     },
     metaText: {
         fontSize: 11,

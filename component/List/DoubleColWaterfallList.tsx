@@ -84,11 +84,11 @@ const DoubleColWaterfallList = ({ skeletonItem, renderListItem, getNextPageData,
             {isMoreEmpty && !isEmpty &&
                 <Text style={styles.footer}>暂无更多帖子, 来发一个!</Text>
             }
-            {/*{isLoading && !isEmpty &&*/}
-            {/*    <View style={styles.footer}>*/}
-            {/*        <Spinner />*/}
-            {/*    </View>*/}
-            {/*}*/}
+            {isLoading && !isEmpty &&
+                <View style={styles.footer}>
+                    <Spinner />
+                </View>
+            }
         </>
     );
 
@@ -141,8 +141,8 @@ const DoubleColWaterfallList = ({ skeletonItem, renderListItem, getNextPageData,
             return;
         }
         const useData = [...data];
-        const emptyData = new Array(5).fill(null);
-        setData((prev: any[]) => [...prev, ...emptyData]);
+        // const emptyData = new Array(5).fill(null);
+        // setData((prev: any[]) => [...prev, ...emptyData]);
         setIsLoading(true);
 
         await new Promise<void>(resolve => {
@@ -198,6 +198,7 @@ const DoubleColWaterfallList = ({ skeletonItem, renderListItem, getNextPageData,
                 {...props}
                 entering={FadeIn.duration(300)}
                 exiting={FadeOut.duration(200)}
+                // @ts-ignore
                 ref={ref}
             >
                 {/*{data[props.index] ?*/}
