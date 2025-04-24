@@ -13,6 +13,7 @@ import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 import com.facebook.react.modules.network.OkHttpClientProvider
 import com.learnchatapp.IgnoreSSLFactory
+import com.swmansion.reanimated.ReanimatedPackage;
 
 class MainApplication : Application(), ReactApplication {
 

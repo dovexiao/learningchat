@@ -11,10 +11,10 @@ import NoteLibrary from './NoteScreen/NoteLibrary';
 import Note from './NoteScreen/Note';
 import QuestionLibrary from './QuestionsScreen/QuestionLibrary';
 import TestLibrary from './QuestionsScreen/TestLibrary';
-import Post from "./ForumScreen/Post";
-import Comment from "./ForumScreen/Comment";
-import PostTI from "./ForumScreen/PostTI";
-import PostTags from "./ForumScreen/PostTags";
+import Post from './ForumScreen/Post';
+import Comment from './ForumScreen/Comment';
+import PostTI from './ForumScreen/PostTI';
+import PostTags from './ForumScreen/PostTags';
 
 const { Navigator, Screen } = createStackNavigator();
 
