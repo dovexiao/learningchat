@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
 import {
     BottomNavigation,
     BottomNavigationTab,
-    Divider,
     Icon,
     IconElement,
     TopNavigationAction,
@@ -10,8 +9,9 @@ import {
 import {NavigationProps} from '../types/navigationType.tsx';
 import TopNavigationAvatar from '../component/TopNavigation/TopNavigationAvatar.tsx';
 import {CenterCardDisplay} from '../component/CenterCardDisplay';
-import OverflowMenu from '../component/Menu/OverflowMenu.tsx';
+// import OverflowMenu from '../component/Menu/OverflowMenu.tsx';
 import * as CommonIcon from '../component/Icon';
+import {View} from 'react-native';
 
 interface TabItem {
     key: string;
@@ -97,8 +97,55 @@ const forumMenu = [{
 }];
 
 const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
-    const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const menuRef = React.useRef<any>(null);
+    const TopNavigationRef = React.useRef<any>(null);
+    const centerCardDisplayRef = useRef<any>(null);
+    const bottomTabNavigationRef = useRef<any>(null);
+    // const menuRef = React.useRef<any>(null);
+
+    const onBottomTabClick = React.useCallback((index: number) => {
+        TopNavigationRef.current?.setSelectedIndex(index);
+        centerCardDisplayRef.current?.setSelectedIndex(index);
+    }, []);
+
+    const onDisplaySlide = React.useCallback((index: number) => {
+        TopNavigationRef.current?.setSelectedIndex(index);
+        bottomTabNavigationRef.current?.setSelectedIndex(index);
+    }, []);
+
+    return (
+        <View style={{ flex: 1 }}>
+            <TopNavigation
+                ref={TopNavigationRef}
+                navigation={navigation}
+            />
+            <CenterCardDisplay
+                ref={centerCardDisplayRef}
+                navigation={navigation}
+                onDisplaySlide={onDisplaySlide}
+            />
+            <BottomTabNavigation
+                ref={bottomTabNavigationRef}
+                onBottomTabClick={onBottomTabClick}
+            />
+            {/*<OverflowMenu ref={menuRef} menuData={getMenuData()} position={{x: 5, y: -50}} />*/}
+        </View>
+    );
+};
+
+type TopNavigationHandle = {
+    setSelectedIndex: (index: number) => void;
+}
+
+type TopNavigationProps = {
+    navigation: any;
+}
+
+const TopNavigation = forwardRef<TopNavigationHandle, TopNavigationProps>(({ navigation }, ref) => {
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+    useImperativeHandle(ref, () => ({
+        setSelectedIndex: (index: number) => setSelectedIndex(index),
+    }));
 
     const getMenuData = (): any[] => {
         switch (selectedIndex) {
@@ -119,6 +166,7 @@ const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
         <>
             {getMenuData().map((item: any) => (
                 <TopNavigationAction
+                    key={item.title}
                     icon={item.icon}
                     onPress={() => {
                         item.onPress(navigation);
@@ -134,37 +182,42 @@ const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
         </>
     );
 
-    const onBottomTabClick = (index: number) => {
-        setSelectedIndex(index);
-    };
+    return (
+        <TopNavigationAvatar
+            navigation={navigation}
+            renderItemAccessory={renderOpeAccessory}
+        />
+    );
+});
+
+type BottomNavigationHandle = {
+    setSelectedIndex: (index: number) => void;
+}
+
+type BottomNavigationProps = {
+    onBottomTabClick: (index: number) => void;
+}
+
+const BottomTabNavigation = forwardRef<BottomNavigationHandle, BottomNavigationProps>(({onBottomTabClick}, ref) => {
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+    useImperativeHandle(ref, () => ({
+        setSelectedIndex: (index: number) => setSelectedIndex(index),
+    }));
 
     return (
-        <>
-            <TopNavigationAvatar
-                navigation={navigation}
-                renderItemAccessory={renderOpeAccessory}
-            />
-            <Divider />
-            <CenterCardDisplay
-                navigation={navigation}
-                selectedIndex={selectedIndex}
-                onBottomTabClick={onBottomTabClick}
-            />
-            <Divider />
-            <BottomNavigation
-                selectedIndex={selectedIndex}
-                onSelect={(index: number) => {
-                    // onBottomTabClick(index);
-                    setSelectedIndex(index);
-                }}
-            >
-                {BottomTabData.map((item) => (
-                    <BottomNavigationTab key={item.key} title={item.label} icon={item.icon} />
-                ))}
-            </BottomNavigation>
-            <OverflowMenu ref={menuRef} menuData={getMenuData()} position={{x: 5, y: -50}} />
-        </>
+        <BottomNavigation
+            selectedIndex={selectedIndex}
+            onSelect={(index: number) => {
+                setSelectedIndex(index);
+                onBottomTabClick(index);
+            }}
+        >
+            {BottomTabData.map((item) => (
+                <BottomNavigationTab key={item.key} title={item.label} icon={item.icon} />
+            ))}
+        </BottomNavigation>
     );
-};
+});
 
 export default AppMain;

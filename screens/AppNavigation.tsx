@@ -15,6 +15,7 @@ import Post from './ForumScreen/Post';
 import Comment from './ForumScreen/Comment';
 import PostTI from './ForumScreen/PostTI';
 import PostTags from './ForumScreen/PostTags';
+import CenterMain from './CenterScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -25,6 +26,7 @@ const HomeNavigator = () => (
         <Screen name="AppLogin" component={AppLogin} />
         <Screen name="AppRegister" component={AppRegister} />
         <Screen name="AppAuthLoading" component={AppAuthLoading} />
+        <Screen name="PersonCenter" component={CenterMain} />
         <Screen name="ChatSpace" component={ChatSpace} initialParams={{item: null}} />
         <Screen name="NoteLibrary" component={NoteLibrary} initialParams={{item: null}} />
         <Screen name="Note" component={Note} initialParams={{item: null}} />
