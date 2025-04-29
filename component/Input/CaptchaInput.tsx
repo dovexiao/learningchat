@@ -1,27 +1,50 @@
 import React from 'react';
 import {StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
-import {Input, Text} from '@ui-kitten/components';
+import {Icon, IconElement, Input, Text, useTheme} from '@ui-kitten/components';
 import {SvgXml} from 'react-native-svg';
 
 type InputProps = {
+    label: string;
     value: string;
     setValue: (value: string) => void;
     captchaSvg: string;
     handleCaptcha: () => void;
+    caption: string;
 };
 
-const CaptchaInput = ({ value, setValue, captchaSvg, handleCaptcha }: InputProps) => {
+const AlertIcon = (props: any): IconElement => (
+    <Icon
+        {...props}
+        name="alert-circle-outline"
+        fill={props.color}
+    />
+);
+
+const CaptchaInput = ({ label, value, setValue, captchaSvg, handleCaptcha, caption }: InputProps) => {
+    const themes = useTheme();
+
+    const renderCaption = (): React.ReactElement => {
+        return (
+            <View style={styles.captionContainer}>
+                {AlertIcon(styles.captionIcon)}
+                <Text style={styles.captionText}>
+                    { caption }
+                </Text>
+            </View>
+        );
+    };
+
     const renderLabel = (): React.ReactElement => {
         return (
             <Text style={styles.label}>
-                Captcha
+                {  label }
             </Text>
         );
     };
 
     const renderCaptcha = (): React.ReactElement => {
         return captchaSvg ? (
-            <View>
+            <View style={{ backgroundColor: themes['background-basic-color-1'] }}>
                 <TouchableWithoutFeedback onPress={handleCaptcha}>
                     <SvgXml xml={captchaSvg} height="35"/>
                 </TouchableWithoutFeedback>
@@ -38,6 +61,7 @@ const CaptchaInput = ({ value, setValue, captchaSvg, handleCaptcha }: InputProps
             value={value}
             label={renderLabel}
             placeholder="请输入..."
+            caption={renderCaption}
             accessoryRight={renderCaptcha}
             onChangeText={nextValue => setValue(nextValue)}
         />
@@ -51,6 +75,23 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 15,
         fontWeight: 'bold',
+    },
+    captionContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    captionIcon: {
+        width: 10,
+        height: 10,
+        marginRight: 5,
+        color: '#8F9BB3',
+    },
+    captionText: {
+        fontSize: 12,
+        fontWeight: '400',
+        fontFamily: 'opensans-regular',
+        color: '#8F9BB3',
     },
 });
 

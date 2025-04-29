@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button} from '@ui-kitten/components';
+import {Button, useTheme} from '@ui-kitten/components';
 
 type DoubleButtonProps = {
     leftLabel: string;
@@ -10,6 +10,8 @@ type DoubleButtonProps = {
 };
 
 const DoubleButton = ({ leftLabel, rightLabel, handleLeft, handleRight }: DoubleButtonProps) => {
+    const themes = useTheme();
+
     return (
         <View style={styles.container}>
             <Button
@@ -19,7 +21,7 @@ const DoubleButton = ({ leftLabel, rightLabel, handleLeft, handleRight }: Double
                 {leftLabel}
             </Button>
             <Button
-                style={[styles.button, styles.rightButton]}
+                style={[styles.button, styles.rightButton, { backgroundColor: themes['background-basic-color-1'] }]}
                 appearance="outline"
                 onPress={handleRight}
             >

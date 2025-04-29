@@ -3,8 +3,10 @@ import { TouchableWithoutFeedback, StyleSheet, View } from 'react-native';
 import { Icon, IconElement, Input, Text } from '@ui-kitten/components';
 
 type InputProps = {
+    label: string;
     value: string;
     setValue: (value: string) => void;
+    caption: string;
 };
 
 const AlertIcon = (props: any): IconElement => (
@@ -15,7 +17,7 @@ const AlertIcon = (props: any): IconElement => (
     />
 );
 
-const SecureInput = ({ value, setValue }: InputProps): React.ReactElement => {
+const SecureInput = ({ label, value, setValue, caption }: InputProps): React.ReactElement => {
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
     const toggleSecureEntry = (): void => {
@@ -38,7 +40,7 @@ const SecureInput = ({ value, setValue }: InputProps): React.ReactElement => {
             <View style={styles.captionContainer}>
                 {AlertIcon(styles.captionIcon)}
                 <Text style={styles.captionText}>
-                    Should contain at least 8 words
+                    { caption }
                 </Text>
             </View>
         );
@@ -47,7 +49,7 @@ const SecureInput = ({ value, setValue }: InputProps): React.ReactElement => {
     const renderLabel = (): React.ReactElement => {
         return (
             <Text style={styles.label}>
-                Password
+                { label }
             </Text>
         );
     };
