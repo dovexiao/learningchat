@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         paddingTop: 30,
     },
     thirdPartyContainer: {
-        height: '20%',
+        height: 100,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',

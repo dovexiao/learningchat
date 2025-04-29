@@ -49,11 +49,13 @@ const AppRegister: React.FC<NavigationProps> = ({ navigation }) => {
 
     return (
         <View style={[styles.container, { backgroundColor: themes['background-basic-color-1'] }]}>
-            <Text category={'h1'} style={styles.title} >注册</Text>
-            <NormalInput label={'手机号码'} value={username} setValue={setUsername} caption={'请输入11位有效数字'} />
-            <SecureInput label={'密码'} value={password} setValue={setPassword} caption={'请输入至少8位有效字符'} />
-            <CaptchaInput label={'验证码'} value={captchaText} setValue={setCaptchaText} captchaSvg={captchaSvg} handleCaptcha={getRegisterCaptcha} caption={'请输入有效答案'} />
-            <DoubleButton leftLabel={'注册'} rightLabel={'登录'} handleLeft={handleRegister} handleRight={handleLogin} />
+            <View style={styles.inputContainer}>
+                <Text category={'h1'} style={styles.title} >注册</Text>
+                <NormalInput label={'手机号码'} value={username} setValue={setUsername} caption={'请输入11位有效数字'} />
+                <SecureInput label={'密码'} value={password} setValue={setPassword} caption={'请输入至少8位有效字符'} />
+                <CaptchaInput label={'验证码'} value={captchaText} setValue={setCaptchaText} captchaSvg={captchaSvg} handleCaptcha={getRegisterCaptcha} caption={'请输入有效答案'} />
+                <DoubleButton leftLabel={'注册'} rightLabel={'登录'} handleLeft={handleRegister} handleRight={handleLogin} />
+            </View>
         </View>
     );
 };
@@ -61,10 +63,12 @@ const AppRegister: React.FC<NavigationProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    inputContainer: {
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        paddingBottom: 120,
+        paddingTop: 30,
     },
     title: {
         marginBottom: 30,
