@@ -46,12 +46,14 @@ const CaptchaInput = ({ label, value, setValue, captchaSvg, handleCaptcha, capti
         return captchaSvg ? (
             <View style={{ backgroundColor: themes['background-basic-color-1'] }}>
                 <TouchableWithoutFeedback onPress={handleCaptcha}>
-                    <SvgXml xml={captchaSvg} height="35"/>
+                    <SvgXml xml={captchaSvg} width="125" height="35"/>
                 </TouchableWithoutFeedback>
             </View>
 
         ) : (
-            <Text style={{textAlign: 'center'}}>加载中...</Text>
+            <View style={[styles.loadingContainer, { backgroundColor: themes['background-basic-color-1'] }]}>
+                <Text>加载中...</Text>
+            </View>
         );
     };
 
@@ -92,6 +94,12 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontFamily: 'opensans-regular',
         color: '#8F9BB3',
+    },
+    loadingContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 125,
+        height: 35,
     },
 });
 
