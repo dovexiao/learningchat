@@ -1,25 +1,18 @@
 import * as keychain from '../storage/SecureStore.ts';
-import * as Axios from 'axios';
-import AxiosInstance = Axios.AxiosInstance;
+import { AxiosInstance }  from 'axios';
 
-const refreshTokenFn = async (api: AxiosInstance, refreshToken: string) => {
+export const refreshTokens = async (api: AxiosInstance) => {
     try {
-        const response = await api.post('/auth/refresh', { refreshToken: refreshToken });
-        return response.data.data;
-    } catch (error: any) {
-        throw error;
-    }
-};
-
-export const refreshAllToken = async (api: AxiosInstance ) => {
-    const rfToken = await keychain.getRefreshToken();
-    if (!rfToken) {
-        return undefined;
-    }
-    try {
-        const { accessToken, refreshToken, user } = await refreshTokenFn(api, rfToken);
+        const refreshTokenCache = await keychain.getRefreshToken();
+        if (!refreshTokenCache) {
+            return undefined;
+        }
+        const response = await api.post('/auth/refresh', {
+            refreshToken: refreshTokenCache,
+        });
+        const { accessToken, refreshToken, userId, username } = response.data.data;
         await setTokens(accessToken, refreshToken);
-        return user;
+        return { userId, username };
     } catch (error) {
         throw error;
     }

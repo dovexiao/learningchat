@@ -16,3 +16,6 @@ export * from './SearchIcon';
 export * from './MessageIcon';
 export * from './AddIcon';
 export * from './LikeShallowIcon';
+export * from './PersonAddIcon';
+export * from './FileAddIcon';
+export * from './FolderAddIcon';

@@ -7,6 +7,8 @@ import AppAuthLoading from './AuthScreen/AppAuthLoading.tsx';
 import AppLogin from './AuthScreen/AppLogin.tsx';
 import AppRegister from './AuthScreen/AppRegister.tsx';
 import ChatSpace from './ChatScreen/ChatSpace';
+import ChatSpaceAdd from './ChatScreen/ChatSpaceAdd';
+import ChatSpaceNotify from './ChatScreen/ChatSpaceNotify';
 import NoteLibrary from './NoteScreen/NoteLibrary';
 import Note from './NoteScreen/Note';
 import QuestionLibrary from './QuestionsScreen/QuestionLibrary';
@@ -28,6 +30,8 @@ const HomeNavigator = () => (
         <Screen name="AppAuthLoading" component={AppAuthLoading} />
         <Screen name="PersonCenter" component={CenterMain} />
         <Screen name="ChatSpace" component={ChatSpace} initialParams={{item: null}} />
+        <Screen name="ChatSpaceAdd" component={ChatSpaceAdd} />
+        <Screen name="ChatSpaceNotify" component={ChatSpaceNotify} />
         <Screen name="NoteLibrary" component={NoteLibrary} initialParams={{item: null}} />
         <Screen name="Note" component={Note} initialParams={{item: null}} />
         <Screen name="QuestionLibrary" component={QuestionLibrary} initialParams={{item: null}} />

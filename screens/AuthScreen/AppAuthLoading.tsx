@@ -1,21 +1,20 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Spinner, useTheme} from '@ui-kitten/components';
-import {useAuth} from '../../hooks/AuthContext.tsx';
 import {NavigationProps} from '../../types/navigationType.tsx';
+import {useAuth} from '../../hooks/AuthContext.tsx';
 
 const AppAuthLoading: React.FC<NavigationProps> = ({ navigation }) => {
     const themes = useTheme();
-    const { isTokenExpired } = useAuth();
-    const navigationRef = useRef(navigation);
+    const { isTokenRefreshed } = useAuth();
 
     React.useEffect(() => {
-        if (isTokenExpired) {
-            navigationRef.current.replace('AppMain');
-        } else if (typeof isTokenExpired === 'boolean') {
-            navigationRef.current.replace('AppLogin');
+        if (isTokenRefreshed) {
+            navigation.replace('AppMain');
+        } else if (typeof isTokenRefreshed === 'boolean') {
+            navigation.replace('AppLogin');
         }
-    }, [isTokenExpired]);
+    }, [isTokenRefreshed]);
 
     return (
         <View style={[styles.loadingOverlay, { backgroundColor: themes['background-basic-color-1'] }]}>

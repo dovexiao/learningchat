@@ -1,57 +1,60 @@
 import React from 'react';
-import TokenManager from '../services/auth/TokenManager.ts';
 import {errAlert} from '../component/Alert/err.tsx';
-
-type User = {
-    userId: number;
-    username: string;
-};
+import * as TokenUtils from '../services/auth/TokenUtils.ts';
+import api from '../services/api/axios.ts';
+import { useSocket } from '../services/socket/hooks/SocketContext.tsx';
+import { useGlobal } from './GlobalContext.tsx';
 
 type AuthContextType = {
-    isTokenExpired: boolean | undefined;
-    getUser: () => User;
-    setUser: (User: User) => void;
+    isTokenRefreshed: boolean | undefined;
 };
 
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-    const [userId, setUserId] = React.useState<number>(0);
-    const [username, setUsername] = React.useState('');
-    const [isTokenExpired, setIsTokenExpired] = React.useState<boolean | undefined>(undefined);
+    const [isTokenRefreshed, setIsTokenRefreshed] = React.useState<boolean | undefined>(undefined);
 
-    const getUser = () => {
-        return { userId, username};
-    };
+    const { connect } = useSocket();
+    const { setUser } = useGlobal();
 
-    const setUser = ({ userId, username }: User) => {
-        setUserId(userId);
-        setUsername(username);
+    // 刷新token并连接
+    const refreshTokenAndConnect = async () => {
+        try {
+            const user = await TokenUtils.refreshTokens(api);
+            const accessToken = await TokenUtils.getAccessToken();
+            if (user && accessToken) {
+                setUser({ userId: user.userId, username: user.username });
+                setIsTokenRefreshed(true);
+                connect(accessToken);
+            } else {
+                setIsTokenRefreshed(false);
+            }
+        } catch (error: any) {
+            await TokenUtils.clearTokens();
+            setIsTokenRefreshed(false);
+            errAlert(error);
+            // const code = error?.response?.data?.error?.details?.code;
+            // if (error?.response && error.response.status === 401 && (code === 'INVALID_TOKEN' || code === 'EXPIRED_REFRESH')) {
+            //     await TokenUtils.clearTokens();
+            //     setIsTokenRefreshed(false);
+            // } else {
+            //     errAlert(error);
+            // }
+        }
     };
 
     React.useEffect(() => {
         (async () => {
-            try {
-                const user = await TokenManager.refreshToken();
-                if (user) {
-                    setUserId(user.userId);
-                    setUsername(user.username);
-                    setIsTokenExpired(true);
-                } else {
-                    setIsTokenExpired(false);
-                }
-            } catch (error: any) {
-                if (error?.response && error.response.status === 401 && error.response.data.error.details.code === 'INVALID_TOKEN') {
-                    await TokenManager.clearTokens();
-                    setIsTokenExpired(false);
-                }
-                errAlert(error);
-            }
+            await refreshTokenAndConnect();
         })();
     }, []);
 
+    const globalValue: AuthContextType = {
+        isTokenRefreshed,
+    };
+
     return (
-        <AuthContext.Provider value={{ isTokenExpired, getUser, setUser }}>
+        <AuthContext.Provider value={globalValue}>
             {children}
         </AuthContext.Provider>
     );
@@ -60,7 +63,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 export const useAuth = () => {
     const context = React.useContext(AuthContext);
     if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error('useGlobal must be used within an GlobalProvider');
     }
     return context;
 };

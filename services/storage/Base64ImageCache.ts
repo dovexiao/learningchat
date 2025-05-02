@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs';
-import { sha256, sha256Bytes } from 'react-native-sha256';
+import { sha256 } from 'react-native-sha256';
 
 // 缓存目录（系统自动清理）
 const CACHE_DIR = RNFS.CachesDirectoryPath + '/base64_images/';

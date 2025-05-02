@@ -5,12 +5,10 @@ import {
     Text,
     TopNavigation,
     TopNavigationAction,
-    Button,
     Icon,
 } from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
-import {ThemeContext} from '../../hooks/ThemeContext.tsx';
-import {useAuth} from "../../hooks/AuthContext.tsx";
+import {useGlobal} from '../../hooks/GlobalContext.tsx';
 
 interface TopNavigationAvatarProps {
     navigation: any;
@@ -40,7 +38,7 @@ const MoonIcon = (props: any): IconElement => (
 
 const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation, renderItemAccessory }) => {
     // const { theme, toggleTheme } = React.useContext(ThemeContext);
-    const user = useAuth().getUser();
+    const { username } = useGlobal();
 
     // const [themeIcon, setThemeIcon] = React.useState(theme === 'light' ? 'sun' : 'moon');
     //
@@ -58,7 +56,7 @@ const TopNavigationAvatar: React.FC<TopNavigationAvatarProps> = ({ navigation, r
         <View style={styles.titleContainer}>
             <TopNavigationAction icon={UserAvatar} onPress={handleGoPersonCenter} />
             <View style={styles.info}>
-                <Text category="h6">用户{user.username}</Text>
+                <Text category="h6">用户{username}</Text>
                 <Text appearance="hint" category="c1" status="success">强网络</Text>
             </View>
         </View>

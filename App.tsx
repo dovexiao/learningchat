@@ -13,7 +13,9 @@ import { AppStackNavigator } from './screens/AppNavigation.tsx';
 import { ThemeContext } from './hooks/ThemeContext.tsx';
 import { default as lightTheme } from './light-theme.json';
 import { default as darkTheme } from './dark-theme.json';
-import { AuthProvider } from './hooks/AuthContext.tsx';
+import { GlobalProvider } from './hooks/GlobalContext.tsx';
+import { SocketProvider } from './services/socket/hooks/SocketContext.tsx';
+import { AuthProvider } from "./hooks/AuthContext.tsx";
 
 type Theme = 'light' | 'dark';
 
@@ -25,6 +27,7 @@ function App(): JSX.Element {
         const nextTheme = theme === 'light' ? 'dark' : 'light';
         const nextCustomTheme = theme === 'light' ? darkTheme : lightTheme;
         setTheme(nextTheme);
+        // @ts-ignore
         setCustomTheme(nextCustomTheme);
     };
 
@@ -32,16 +35,19 @@ function App(): JSX.Element {
         <>
             <IconRegistry icons={EvaIconsPack}/>
             <ThemeContext.Provider value={{ theme, toggleTheme }}>
-                <AuthProvider>
-                    <ApplicationProvider {...eva} theme={{...eva[theme], ...customTheme}}>
-                        <AppStackNavigator />
-                    </ApplicationProvider>
-                </AuthProvider>
+                <SocketProvider>
+                    <GlobalProvider>
+                        <AuthProvider>
+                            <ApplicationProvider {...eva} theme={{...eva[theme], ...customTheme}}>
+                                <AppStackNavigator />
+                            </ApplicationProvider>
+                        </AuthProvider>
+                    </GlobalProvider>
+                </SocketProvider>
             </ThemeContext.Provider>
         </>
 
     );
 }
-
 
 export default App;

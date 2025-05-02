@@ -11,6 +11,7 @@ import * as api from '../../services/api/AuthApi.ts';
 import * as TokenUtils from '../../services/auth/TokenUtils.ts';
 import {errAlert} from '../../component/Alert/err.tsx';
 import {useGlobal} from '../../hooks/GlobalContext.tsx';
+import {useSocket} from '../../services/socket/hooks/SocketContext.tsx';
 
 const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
     const [username, setUsername] = React.useState('');
@@ -19,6 +20,7 @@ const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
     const [captchaText, setCaptchaText] = React.useState('');
     const [captchaSvg, setCaptchaSvg] = React.useState('');
     const { setUser } = useGlobal();
+    const { connect } = useSocket();
     const themes = useTheme();
 
     const handleLogin = async () => {
@@ -26,6 +28,7 @@ const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
            const { accessToken, refreshToken, userId } = await api.login(username, password, captchaKey, captchaText);
            await TokenUtils.setTokens(accessToken, refreshToken);
            setUser({ userId, username });
+           connect(accessToken);
            await navigation.navigate('AppMain');
        } catch (error) {
            errAlert(error);

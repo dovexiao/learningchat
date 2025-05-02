@@ -10,7 +10,7 @@ import {
 import LottieView from 'lottie-react-native';
 import { NavigationProps } from '../types/navigationType.tsx';
 import { useTheme } from '@ui-kitten/components';
-import {useAuth} from '../hooks/AuthContext.tsx';
+import { useAuth } from '../hooks/AuthContext.tsx';
 
 const AppStart: React.FC<NavigationProps> = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -18,13 +18,13 @@ const AppStart: React.FC<NavigationProps> = ({ navigation }) => {
     const animationRef = useRef<LottieView>(null);
     const countdownRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const themes = useTheme();
-    const { isTokenExpired } = useAuth();
+    const { isTokenRefreshed } = useAuth();
 
     const handleAnimationFinishRef = useRef(() => {
         // console.log('动画结束');
-        if (isTokenExpired) {
+        if (isTokenRefreshed) {
             navigation.replace('AppMain');
-        } else if (typeof isTokenExpired === 'boolean') {
+        } else if (typeof isTokenRefreshed === 'boolean') {
             navigation.replace('AppLogin');
         } else {
             navigation.replace('AppAuthLoading');

@@ -9,9 +9,9 @@ import {
 import {NavigationProps} from '../types/navigationType.tsx';
 import TopNavigationAvatar from '../component/TopNavigation/TopNavigationAvatar.tsx';
 import {CenterCardDisplay} from '../component/CenterCardDisplay';
-// import OverflowMenu from '../component/Menu/OverflowMenu.tsx';
 import * as CommonIcon from '../component/Icon';
 import {View} from 'react-native';
+import {useGlobal} from '../hooks/GlobalContext.tsx';
 
 interface TabItem {
     key: string;
@@ -61,11 +61,15 @@ const chatMenu = [{
 }, {
     icon: CommonIcon.MessageIcon,
     title: '消息通知',
-    onPress: () => {},
+    onPress: (navigation: any) => {
+        navigation.navigate('ChatSpaceNotify');
+    },
 }, {
     icon: CommonIcon.PersonAddIcon,
     title: '加友加群',
-    onPress: () => {},
+    onPress: (navigation: any) => {
+        navigation.navigate('ChatSpaceAdd');
+    },
 }];
 
 const noteMenu = [{
@@ -97,25 +101,27 @@ const forumMenu = [{
 }];
 
 const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
-    const TopNavigationRef = React.useRef<any>(null);
+    const topNavigationRef = React.useRef<any>(null);
     const centerCardDisplayRef = useRef<any>(null);
     const bottomTabNavigationRef = useRef<any>(null);
-    // const menuRef = React.useRef<any>(null);
+    const { bottomModalRef } = useGlobal();
 
     const onBottomTabClick = React.useCallback((index: number) => {
-        TopNavigationRef.current?.setSelectedIndex(index);
-        centerCardDisplayRef.current?.setSelectedIndex(index);
-    }, []);
+        topNavigationRef.current?.setSelectedIndex(index);
+        centerCardDisplayRef.current?.animateToPosition(index);
+        bottomModalRef.current?.hidden();
+    }, [bottomModalRef]);
 
     const onDisplaySlide = React.useCallback((index: number) => {
-        TopNavigationRef.current?.setSelectedIndex(index);
+        topNavigationRef.current?.setSelectedIndex(index);
         bottomTabNavigationRef.current?.setSelectedIndex(index);
-    }, []);
+        bottomModalRef.current?.hidden();
+    }, [bottomModalRef]);
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, position: 'relative' }}>
             <TopNavigation
-                ref={TopNavigationRef}
+                ref={topNavigationRef}
                 navigation={navigation}
             />
             <CenterCardDisplay
@@ -127,7 +133,6 @@ const AppMain: React.FC<NavigationProps> = ({ navigation }) => {
                 ref={bottomTabNavigationRef}
                 onBottomTabClick={onBottomTabClick}
             />
-            {/*<OverflowMenu ref={menuRef} menuData={getMenuData()} position={{x: 5, y: -50}} />*/}
         </View>
     );
 };
@@ -209,8 +214,8 @@ const BottomTabNavigation = forwardRef<BottomNavigationHandle, BottomNavigationP
         <BottomNavigation
             selectedIndex={selectedIndex}
             onSelect={(index: number) => {
-                setSelectedIndex(index);
                 onBottomTabClick(index);
+                setSelectedIndex(index);
             }}
         >
             {BottomTabData.map((item) => (

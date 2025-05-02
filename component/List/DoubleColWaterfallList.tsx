@@ -1,11 +1,10 @@
 import React from 'react';
-import {Animated, Dimensions, StyleSheet, View} from 'react-native';
+import {Animated, StyleSheet, View} from 'react-native';
 import {CellContainer, MasonryFlashList} from '@shopify/flash-list';
 import {Spinner, Text} from '@ui-kitten/components';
 import {FadeIn, FadeOut} from 'react-native-reanimated';
 
 type WaterfallListProps = {
-    skeletonItem: () => React.ReactElement;
     renderListItem: ({item, index}: { item: any, index: number }) => React.ReactElement
     getNextPageData: () => Promise<any>;
     estimateListItemHeight: (item: any, index: number) => any;
@@ -59,9 +58,7 @@ const crossGrouping = (data: any[], firstData: any[], secondData: any[]): any[] 
     return newData;
 };
 
-const { width: screenWidth } = Dimensions.get('window');
-
-const DoubleColWaterfallList = ({ skeletonItem, renderListItem, getNextPageData, estimateListItemHeight }: WaterfallListProps): React.ReactElement => {
+const DoubleColWaterfallList = ({ renderListItem, getNextPageData, estimateListItemHeight }: WaterfallListProps): React.ReactElement => {
     const [data, setData] = React.useState<any>([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [isEmpty, setIsEmpty] = React.useState(false);

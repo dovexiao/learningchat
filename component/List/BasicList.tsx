@@ -1,25 +1,43 @@
 import React from 'react';
-import {Divider, List, useTheme, Text} from '@ui-kitten/components';
-import {TouchableOpacity, View, StyleSheet} from 'react-native';
+import {useTheme, Text, Spinner} from '@ui-kitten/components';
+import {View, StyleSheet, Pressable} from 'react-native';
+import {FlashList} from '@shopify/flash-list';
 
-interface IListItem {
-    title: string;
-    subTitle: string;
-    other: any;
-}
-
-interface ListProps {
-    data: IListItem[],
+type BasicListProps = {
+    data: any[],
+    renderEmptyLabel: string;
     onListItemClick: (item: any) => void;
     accessoryLeft: () => React.ReactElement;
-    accessoryRight: (item: IListItem) => React.ReactElement;
+    accessoryRight: (item: any) => React.ReactElement;
+    onEndReached: () => Promise<any>;
+    onRefresh: () => Promise<any>;
 }
 
-export const BasicList = ({ data, onListItemClick, accessoryLeft, accessoryRight }: ListProps): React.ReactElement => {
+const BasicList = ({ data, renderEmptyLabel, onListItemClick, accessoryLeft, accessoryRight, onEndReached, onRefresh }: BasicListProps): React.ReactElement => {
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [isEmpty, setIsEmpty] = React.useState(false);
+    const [isMoreEmpty, setIsMoreEmpty] = React.useState(false);
+    const [refreshingLoading, setRefreshingLoading] = React.useState(false);
     const themes = useTheme();
 
-    const renderItem = ({ item, index }: { item: IListItem, index: number }) => (
-        <TouchableOpacity
+    const renderEmpty = (): React.ReactElement => (
+        <>
+            {!isLoading && <Text style={styles.empty}>{renderEmptyLabel}</Text>}
+        </>
+    );
+
+    const renderFooter = (): React.ReactElement => (
+        <>
+            {isLoading && !isEmpty &&
+                <View style={styles.footer}>
+                    <Spinner />
+                </View>
+            }
+        </>
+    );
+
+    const renderListItem = ({ item, index }: { item: any, index: number }) => (
+        <Pressable
             style={[styles.container, { backgroundColor: themes['background-basic-color-1']}]}
             onPress={() => onListItemClick(item)}
         >
@@ -37,15 +55,55 @@ export const BasicList = ({ data, onListItemClick, accessoryLeft, accessoryRight
             <View style={styles.otherContainer}>
                 {accessoryRight(item)}
             </View>
-        </TouchableOpacity>
+        </Pressable>
     );
 
+    const loadMore = async () => {
+        if (isLoading || isMoreEmpty) {
+            return;
+        }
+        setIsLoading(true);
+
+        await new Promise<void>(resolve => {
+            requestAnimationFrame(() => {
+                resolve();
+            });
+        });
+
+        await onEndReached();
+
+        setIsEmpty(data.length === 0);
+        setIsMoreEmpty(data.length === 0);
+        setIsLoading(false);
+    };
+
+    const refreshInitial = async () => {
+        setRefreshingLoading(true);
+
+        await onRefresh();
+
+        setIsMoreEmpty(data.length === 0);
+        setIsEmpty(data.length === 0);
+        setRefreshingLoading(false);
+    };
+
     return (
-        <List
-            style={{ width: '100%' }}
+        <FlashList
+            keyExtractor={(item: any, index: number) => index.toString()}
             data={data}
-            ItemSeparatorComponent={Divider}
-            renderItem={renderItem}
+            estimatedItemSize={100}
+            renderItem={renderListItem}
+            ListEmptyComponent={renderEmpty}
+            ListFooterComponent={renderFooter}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.1}
+            onRefresh={refreshInitial}
+            refreshing={refreshingLoading}
+            onLoad={({ elapsedTimeInMs }) => {
+                if (elapsedTimeInMs > 100) {
+                    // console.warn('列表渲染耗时较高，建议优化动画复杂度');
+                }
+            }}
         />
     );
 };
@@ -80,4 +138,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    empty: {
+        textAlign: 'center',
+        width: '100%',
+        paddingVertical: 40,
+    },
+    footer: {
+        alignItems: 'center',
+        width: '100%',
+        paddingVertical: 30,
+    },
 });
+
+export default BasicList;

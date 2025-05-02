@@ -14,17 +14,19 @@ type CenterCardDisplayProps = {
 };
 
 type CenterCardDisplayHandle = {
-    setSelectedIndex: (index: number) => void;
+    animateToPosition: (index: number) => void;
 }
 
 export const CenterCardDisplay = forwardRef<CenterCardDisplayHandle, CenterCardDisplayProps>(
     ({navigation, onDisplaySlide}, ref) => {
         const pan = useRef(new Animated.Value(0)).current;
-        const [selectedIndex, setSelectedIndex] = React.useState(0);
-        const selectedIndexRef = useRef(selectedIndex);
+        const selectedIndexRef = useRef(0);
 
         useImperativeHandle(ref, () => ({
-            setSelectedIndex: (index: number) => setSelectedIndex(index),
+            animateToPosition: (index: number) => {
+                animateToPosition(index);
+                selectedIndexRef.current = index;
+            },
         }));
 
         // 手势响应器配置
@@ -60,14 +62,14 @@ export const CenterCardDisplay = forwardRef<CenterCardDisplayHandle, CenterCardD
                     // console.log('当前选择index', currentIndex);
                     if (gestureState.dx < -SCREEN_WIDTH * 0.05 && currentIndex < 3) {
                         // console.log('向右滑动到关注');
+                        onDisplaySlide(currentIndex + 1);
                         animateToPosition(currentIndex + 1);
                         selectedIndexRef.current = currentIndex + 1;
-                        onDisplaySlide(currentIndex + 1);
                     } else if (gestureState.dx > SCREEN_WIDTH * 0.05 && currentIndex > 0) {
                         // console.log('向左滑动到推荐');
+                        onDisplaySlide(currentIndex - 1);
                         animateToPosition(currentIndex - 1);
                         selectedIndexRef.current = currentIndex - 1;
-                        onDisplaySlide(currentIndex - 1);
                     } else {
                         // console.log('滑动复位');
                         animateToPosition(currentIndex);
@@ -109,11 +111,6 @@ export const CenterCardDisplay = forwardRef<CenterCardDisplayHandle, CenterCardD
             };
         }, [pan]);
 
-        React.useEffect(() => {
-            animateToPosition(selectedIndex);
-            selectedIndexRef.current = selectedIndex;
-        }, [selectedIndex]);
-
         return (
             <View style={styles.container}>
                 {/* 滑动内容区域 */}
@@ -129,12 +126,12 @@ export const CenterCardDisplay = forwardRef<CenterCardDisplayHandle, CenterCardD
                 >
                     {/* 消息模块 */}
                     <View style={[styles.page, { left: 0 }]}>
-                        <ChatMain navigation={navigation}/>
+                        <ChatMain navigation={navigation} />
                     </View>
 
                     {/* 笔记模块 */}
                     <View style={[styles.page, { left: SCREEN_WIDTH }]}>
-                        <NoteMain navigation={navigation}/>
+                        <NoteMain navigation={navigation} />
                     </View>
 
                     {/* 题库模块 */}

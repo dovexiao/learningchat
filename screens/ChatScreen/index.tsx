@@ -1,20 +1,21 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {NavigationProps} from '../../types/navigationType.tsx';
-import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
-import {Divider, Layout, Text, TopNavigationAction} from '@ui-kitten/components';
+import {Layout, Text, TopNavigationAction} from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
-import { BasicList } from '../../component/List/BasicList.tsx';
+import BasicList from '../../component/List/BasicList.tsx';
 import * as CommonIcon from '../../component/Icon';
-
-const data = new Array(15).fill({
-    title: '用户123',
-    subTitle: 'Description for Item 1234556787577522222211314141',
-    other: 1000,
-});
+import {useSocket} from '../../services/socket/hooks/SocketContext.tsx';
+import {ChatEvent} from '../../services/socket/events.ts';
+import {useGlobal} from '../../hooks/GlobalContext.tsx';
 
 const ChatMain: React.FC<NavigationProps> = ({ navigation }) => {
-    const onMessageClick = (item: any) => {
+    const [spaceData, setSpaceData] = React.useState<any[]>([]);
+
+    const { userId } = useGlobal();
+    const { handleChatPrivateOffline, subscribe, unsubscribe } = useSocket();
+
+    const onSpaceClick = (item: any) => {
         navigation.navigate('ChatSpace', { item });
     };
 
@@ -26,36 +27,71 @@ const ChatMain: React.FC<NavigationProps> = ({ navigation }) => {
 
     const accessoryRight = (item: any) => (
         <>
-            {item.other > 0 && (
+            {item.unread > 0 && (
                 <View style={styles.unreadBadge}>
                     <Text style={styles.unreadText}>
-                        {item.other > 99 ? '99+' : item.other}
+                        {item.unread > 99 ? '99+' : item.unread}
                     </Text>
                 </View>
             )}
         </>
     );
 
-    const renderOpeAccessory = () => (
-        <></>
-    );
+    const onEndReached = async () => {
+        setSpaceData((prev: any[]) => [...prev, ...[]]);
+    };
+
+    const onRefresh = async () => {
+        setSpaceData([]);
+    };
+
+    React.useEffect(() => {
+        handleChatPrivateOffline(userId, (ack: any) => {
+            const { status } = ack;
+            if (status === 'success') {
+                console.log('获取离线单聊消息成功', ack.data);
+            } else {
+                console.log('获取离线单聊消息失败', ack.message, ack.code);
+            }
+        });
+
+        const handler = (payload: any, ack: any) => {
+            console.log('收到单聊消息', payload);
+            if (payload.userInfo) {
+                const newSpace: any = {
+                    spaceId: payload.userInfo.type === 'sender' ? payload.from : payload.to,
+                    spaceName: payload.userInfo.name,
+                    spaceAvatar: payload.avatar,
+                    latestMessage: payload.content.type === 'text' ? payload.content.body : '',
+                    unread: 1,
+                };
+                newSpace.title = newSpace.spaceName;
+                newSpace.subTitle = newSpace.latestMessage;
+                console.log(newSpace);
+                setSpaceData((prev: any[]) => [newSpace, ...prev]);
+            }
+            ack({ status: 'success'});
+        };
+
+        // 动态订阅特定事件
+        subscribe(ChatEvent.ChatPrivate, handler);
+        return () => {
+            unsubscribe(ChatEvent.ChatPrivate, handler);
+        };
+    }, []);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <TopNavigationAvatar
-                navigation={navigation}
-                renderItemAccessory={renderOpeAccessory}
+        <Layout style={{ flex: 1 }}>
+            <BasicList
+                data={spaceData}
+                renderEmptyLabel={'还没有好友/群哦, 去加一个吧'}
+                accessoryLeft={accessoryLeft}
+                accessoryRight={accessoryRight}
+                onEndReached={onEndReached}
+                onRefresh={onRefresh}
+                onListItemClick={onSpaceClick}
             />
-            <Divider />
-            <Layout style={{ flex: 1, alignItems: 'center'}}>
-                <BasicList
-                    data={data}
-                    accessoryLeft={accessoryLeft}
-                    accessoryRight={accessoryRight}
-                    onListItemClick={onMessageClick}
-                />
-            </Layout>
-        </SafeAreaView>
+        </Layout>
     );
 };
 

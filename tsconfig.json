@@ -1,6 +1,8 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    "types": ["jest", "react-jsx","react-native", "react-test-renderer", "node"]
+    "types": ["jest", "react-jsx","react-native", "react-test-renderer", "node"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }
