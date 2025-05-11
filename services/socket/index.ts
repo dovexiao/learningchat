@@ -40,13 +40,13 @@ class SocketService {
         this.socket.on('disconnect', (reason) => {
             if (reason === 'io server disconnect') {
                 // the disconnection was initiated by the server, you need to reconnect manually
-                (async () => {
-                    await TokenUtils.refreshTokens(api);
-                    const newToken = await TokenUtils.getAccessToken();
-                    if (newToken) {
-                        this.reconnect(newToken);
-                    }
-                })();
+                // (async () => {
+                //     await TokenUtils.refreshTokens(api);
+                //     const newToken = await TokenUtils.getAccessToken();
+                //     if (newToken) {
+                //         this.reconnect(newToken);
+                //     }
+                // })();
             }
             // else the socket will automatically try to reconnect
         });

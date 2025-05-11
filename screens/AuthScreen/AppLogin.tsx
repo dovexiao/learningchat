@@ -25,9 +25,9 @@ const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
 
     const handleLogin = async () => {
        try {
-           const { accessToken, refreshToken, userId } = await api.login(username, password, captchaKey, captchaText);
+           const { accessToken, refreshToken, userId, nickname, avatar, introduction } = await api.login(username, password, captchaKey, captchaText);
            await TokenUtils.setTokens(accessToken, refreshToken);
-           setUser({ userId, username });
+           setUser({ userId, nickname, avatar, introduction });
            connect(accessToken);
            await navigation.navigate('AppMain');
        } catch (error) {
