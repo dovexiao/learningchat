@@ -5,13 +5,13 @@ import NormalInput from '../../component/Input/Normalnput.tsx';
 import DoubleButton from '../../component/Button/DoubleButton.tsx';
 import {Button, Text, useTheme} from '@ui-kitten/components';
 import { GithubIcon } from '../../component/Icon';
-import {NavigationProps} from '../../types/navigationType.tsx';
+import {NavigationProps} from '../../types/navigationType.ts';
 import CaptchaInput from '../../component/Input/CaptchaInput.tsx';
 import * as api from '../../services/api/AuthApi.ts';
 import * as TokenUtils from '../../services/auth/TokenUtils.ts';
 import {errAlert} from '../../component/Alert/err.tsx';
 import {useGlobal} from '../../hooks/GlobalContext.tsx';
-import {useSocket} from '../../services/socket/hooks/SocketContext.tsx';
+import {useSocket} from '../../hooks/SocketContext.tsx';
 
 const AppLogin: React.FC<NavigationProps> = ({ navigation }) => {
     const [username, setUsername] = React.useState('');

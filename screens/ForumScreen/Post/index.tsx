@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavigationProps} from '../../../types/navigationType.tsx';
+import {NavigationProps} from '../../../types/navigationType.ts';
 import {Divider, Input, Text, TopNavigationAction, ViewPager} from '@ui-kitten/components';
 import {SafeAreaView, TouchableOpacity, View, StyleSheet, Image, ScrollView, Alert, Keyboard} from 'react-native';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';

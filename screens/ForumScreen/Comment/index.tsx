@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavigationProps} from '../../../types/navigationType.tsx';
+import {NavigationProps} from '../../../types/navigationType.ts';
 import {Divider, Input, Text, TopNavigationAction} from '@ui-kitten/components';
 import {Alert, SafeAreaView, View, StyleSheet, ScrollView, TouchableOpacity, Keyboard} from 'react-native';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';
@@ -7,6 +7,7 @@ import * as CommonIcons from '../../../component/Icon';
 import {useAuth} from '../../../hooks/AuthContext.tsx';
 import * as ForumApi from '../../../services/api/ForumApi.ts';
 import {errAlert} from '../../../component/Alert/err.tsx';
+import {useGlobal} from "../../../hooks/GlobalContext.tsx";
 
 type Reply = {
     replyId: number;
@@ -34,7 +35,7 @@ const Comment: React.FC<NavigationProps> = ({ navigation, route }) => {
     const [inputValue, setInputValue] = React.useState('');
     const [replyingReply, setReplyingReply] = React.useState<Reply | null>(null);
     const inputRef = React.useRef<any>(null);
-    const { userId } = useAuth().getUser();
+    const { userId } = useGlobal()
 
     const renderRightActions = (): React.ReactElement => (
         <TopNavigationAction

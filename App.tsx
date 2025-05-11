@@ -14,8 +14,9 @@ import { ThemeContext } from './hooks/ThemeContext.tsx';
 import { default as lightTheme } from './light-theme.json';
 import { default as darkTheme } from './dark-theme.json';
 import { GlobalProvider } from './hooks/GlobalContext.tsx';
-import { SocketProvider } from './services/socket/hooks/SocketContext.tsx';
+import { SocketProvider } from './hooks/SocketContext.tsx';
 import { AuthProvider } from "./hooks/AuthContext.tsx";
+import { CacheProvider } from "./hooks/CacheContext.tsx";
 
 type Theme = 'light' | 'dark';
 
@@ -38,9 +39,11 @@ function App(): JSX.Element {
                 <SocketProvider>
                     <GlobalProvider>
                         <AuthProvider>
-                            <ApplicationProvider {...eva} theme={{...eva[theme], ...customTheme}}>
-                                <AppStackNavigator />
-                            </ApplicationProvider>
+                            <CacheProvider>
+                                <ApplicationProvider {...eva} theme={{...eva[theme], ...customTheme}}>
+                                    <AppStackNavigator />
+                                </ApplicationProvider>
+                            </CacheProvider>
                         </AuthProvider>
                     </GlobalProvider>
                 </SocketProvider>

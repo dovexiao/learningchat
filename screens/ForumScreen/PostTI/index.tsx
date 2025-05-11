@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavigationProps} from '../../../types/navigationType.tsx';
+import {NavigationProps} from '../../../types/navigationType.ts';
 import {
     Image,
     SafeAreaView,

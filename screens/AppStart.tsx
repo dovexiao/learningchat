@@ -8,7 +8,7 @@ import {
     Text,
 } from 'react-native';
 import LottieView from 'lottie-react-native';
-import { NavigationProps } from '../types/navigationType.tsx';
+import { NavigationProps } from '../types/navigationType.ts';
 import { useTheme } from '@ui-kitten/components';
 import { useAuth } from '../hooks/AuthContext.tsx';
 

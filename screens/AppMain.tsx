@@ -6,7 +6,7 @@ import {
     IconElement,
     TopNavigationAction,
 } from '@ui-kitten/components';
-import {NavigationProps} from '../types/navigationType.tsx';
+import {NavigationProps} from '../types/navigationType.ts';
 import TopNavigationAvatar from '../component/TopNavigation/TopNavigationAvatar.tsx';
 import {CenterCardDisplay} from '../component/CenterCardDisplay';
 import * as CommonIcon from '../component/Icon';
@@ -62,7 +62,7 @@ const chatMenu = [{
     icon: CommonIcon.MessageIcon,
     title: '消息通知',
     onPress: (navigation: any) => {
-        navigation.navigate('ChatSpaceNotify');
+        navigation.navigate('SystemNotification');
     },
 }, {
     icon: CommonIcon.PersonAddIcon,

@@ -2,7 +2,7 @@ import {Divider, type IconElement, Layout, Tab, TabBar, TopNavigationAction} fro
 import React from 'react';
 import {Alert, SafeAreaView} from 'react-native';
 import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
-import {NavigationProps} from '../../types/navigationType.tsx';
+import {NavigationProps} from '../../types/navigationType.ts';
 import * as CommonIcon from '../../component/Icon';
 import {BasicList} from '../../component/List/BasicList.tsx';
 

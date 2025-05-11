@@ -9,7 +9,7 @@ import {
 import React from 'react';
 import {Dimensions, Image, Pressable, SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
-import {NavigationProps} from '../../types/navigationType.tsx';
+import {NavigationProps} from '../../types/navigationType.ts';
 // import * as CommonIcon from '../../component/Icon';
 import DoubleColWaterfallList from '../../component/List/DoubleColWaterfallList.tsx';
 import * as CommonIcons from '../../component/Icon';
@@ -18,7 +18,7 @@ import * as api from '../../services/api/ForumApi';
 import {errAlert} from '../../component/Alert/err.tsx';
 import FastImage from 'react-native-fast-image';
 import ContentLoader, {Rect} from 'react-content-loader/native';
-import {saveBase64ToFile} from '../../services/storage/Base64ImageCache.ts';
+import {saveBase64ToFile} from '../../services/storage/ImageCache.ts';
 
 type ImageItem = {
     type: string | undefined;

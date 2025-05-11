@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {NavigationProps} from '../../types/navigationType.tsx';
+import {NavigationProps} from '../../types/navigationType.ts';
 import {Text, useTheme} from '@ui-kitten/components';
 import SecureInput from '../../component/Input/SecureInput.tsx';
 import NormalInput from '../../component/Input/Normalnput.tsx';

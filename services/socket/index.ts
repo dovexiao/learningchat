@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import * as TokenUtils from '../auth/TokenUtils.ts';
 import api from '../api/axios.ts';
 
-const SOCKET_URL = 'http://192.168.215.198:8082';
+const SOCKET_URL = 'http://192.168.11.198:8082';
 
 class SocketService {
     private static instance: SocketService;

@@ -8,7 +8,6 @@ import AppLogin from './AuthScreen/AppLogin.tsx';
 import AppRegister from './AuthScreen/AppRegister.tsx';
 import ChatSpace from './ChatScreen/ChatSpace';
 import ChatSpaceAdd from './ChatScreen/ChatSpaceAdd';
-import ChatSpaceNotify from './ChatScreen/ChatSpaceNotify';
 import NoteLibrary from './NoteScreen/NoteLibrary';
 import Note from './NoteScreen/Note';
 import QuestionLibrary from './QuestionsScreen/QuestionLibrary';
@@ -18,6 +17,7 @@ import Comment from './ForumScreen/Comment';
 import PostTI from './ForumScreen/PostTI';
 import PostTags from './ForumScreen/PostTags';
 import CenterMain from './CenterScreen';
+import SystemNotification from "./SystemNotification";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -29,9 +29,9 @@ const HomeNavigator = () => (
         <Screen name="AppRegister" component={AppRegister} />
         <Screen name="AppAuthLoading" component={AppAuthLoading} />
         <Screen name="PersonCenter" component={CenterMain} />
+        <Screen name="SystemNotification" component={SystemNotification} />
         <Screen name="ChatSpace" component={ChatSpace} initialParams={{item: null}} />
         <Screen name="ChatSpaceAdd" component={ChatSpaceAdd} />
-        <Screen name="ChatSpaceNotify" component={ChatSpaceNotify} />
         <Screen name="NoteLibrary" component={NoteLibrary} initialParams={{item: null}} />
         <Screen name="Note" component={Note} initialParams={{item: null}} />
         <Screen name="QuestionLibrary" component={QuestionLibrary} initialParams={{item: null}} />

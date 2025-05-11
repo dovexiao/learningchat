@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Spinner, useTheme} from '@ui-kitten/components';
-import {NavigationProps} from '../../types/navigationType.tsx';
+import {NavigationProps} from '../../types/navigationType.ts';
 import {useAuth} from '../../hooks/AuthContext.tsx';
 
 const AppAuthLoading: React.FC<NavigationProps> = ({ navigation }) => {

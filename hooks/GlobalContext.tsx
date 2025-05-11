@@ -4,35 +4,45 @@ import Message from '../component/Modal/Message.tsx';
 
 type User = {
     userId: string;
-    username: string;
+    nickname: string;
+    avatar: string;
+    introduction: string;
 };
 
 type GlobalContextType = {
     userId: string;
-    username: string;
+    nickname: string;
+    avatar: string;
+    introduction: string;
     setUser: (user: User) => void;
     centerModalRef: any;
     bottomModalRef: any;
-    messageRef: any,
+    messageRef: any;
 };
 
 export const GlobalContext = React.createContext<GlobalContextType | null>(null);
 
 export const GlobalProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     const [userId, setUserId] = React.useState('');
-    const [username, setUsername] = React.useState('');
+    const [nickname, setNickname] = React.useState('');
+    const [avatar, setAvatar] = React.useState('');
+    const [introduction, setIntroduction] = React.useState('');
     const centerModalRef = useRef<any>(null);
     const bottomModalRef = useRef<any>(null);
     const messageRef = useRef<any>(null);
 
     const setUser = (user: User) => {
         setUserId(user.userId);
-        setUsername(user.username);
+        setNickname(user.nickname);
+        setAvatar(user.avatar);
+        setIntroduction(user.introduction);
     };
 
     const globalValue: GlobalContextType = {
         userId,
-        username,
+        nickname,
+        avatar,
+        introduction,
         setUser,
         centerModalRef,
         bottomModalRef,

@@ -131,7 +131,8 @@ export const CenterCardDisplay = forwardRef<CenterCardDisplayHandle, CenterCardD
 
                     {/* 笔记模块 */}
                     <View style={[styles.page, { left: SCREEN_WIDTH }]}>
-                        <NoteMain navigation={navigation} />
+                        {/*<NoteMain navigation={navigation} />*/}
+                        <Text>笔记</Text>
                     </View>
 
                     {/* 题库模块 */}
@@ -141,8 +142,8 @@ export const CenterCardDisplay = forwardRef<CenterCardDisplayHandle, CenterCardD
 
                     {/* 论坛模块 */}
                     <View style={[styles.page, { left: SCREEN_WIDTH * 3 }]}>
-                        <ForumMain navigation={navigation}/>
-
+                        {/*<ForumMain navigation={navigation}/>*/}
+                        <Text>论坛</Text>
                     </View>
                 </Animated.View>
                 <Divider />

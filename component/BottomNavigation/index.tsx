@@ -4,7 +4,7 @@ import ChatMain from '../../screens/ChatScreen';
 import NoteMain from '../../screens/NoteScreen';
 import QuestionMain from '../../screens/QuestionsScreen';
 import ForumMain from '../../screens/ForumScreen';
-import {NavigationProps} from '../../types/navigationType.tsx';
+import {NavigationProps} from '../../types/navigationType.ts';
 
 interface TabItem {
     key: string;

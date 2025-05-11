@@ -116,7 +116,7 @@ export const commentPost = async (postId: number, userId: number, content: strin
     }
 };
 
-export const replyComment = async (commentId: number, userId: number, replyId: number, content: string) => {
+export const replyComment = async (commentId: number, userId: string, replyId: number, content: string) => {
     try {
         const response = await api.post(`/forum/comments/${commentId}/reply`, {
             commentId,

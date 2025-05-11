@@ -2,7 +2,7 @@ import React from 'react';
 import {Alert, SafeAreaView} from 'react-native';
 import {Divider, Layout, TopNavigationAction} from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
-import {NavigationProps} from '../../../types/navigationType.tsx';
+import {NavigationProps} from '../../../types/navigationType.ts';
 import {BasicList} from '../../../component/List/BasicList.tsx';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';
 import * as CommonIcon from '../../../component/Icon';

@@ -2,7 +2,7 @@ import React from 'react';
 import {errAlert} from '../component/Alert/err.tsx';
 import * as TokenUtils from '../services/auth/TokenUtils.ts';
 import api from '../services/api/axios.ts';
-import { useSocket } from '../services/socket/hooks/SocketContext.tsx';
+import { useSocket } from './SocketContext.tsx';
 import { useGlobal } from './GlobalContext.tsx';
 
 type AuthContextType = {
@@ -23,7 +23,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
             const user = await TokenUtils.refreshTokens(api);
             const accessToken = await TokenUtils.getAccessToken();
             if (user && accessToken) {
-                setUser({ userId: user.userId, username: user.username });
+                setUser({ userId: user.userId, nickname: user.nickname, avatar: user.avatar, introduction: user.introduction });
                 setIsTokenRefreshed(true);
                 connect(accessToken);
             } else {

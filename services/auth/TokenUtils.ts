@@ -10,9 +10,9 @@ export const refreshTokens = async (api: AxiosInstance) => {
         const response = await api.post('/auth/refresh', {
             refreshToken: refreshTokenCache,
         });
-        const { accessToken, refreshToken, userId, username } = response.data.data;
+        const { accessToken, refreshToken, userId, nickname, avatar, introduction } = response.data.data;
         await setTokens(accessToken, refreshToken);
-        return { userId, username };
+        return { userId, nickname, avatar, introduction };
     } catch (error) {
         throw error;
     }

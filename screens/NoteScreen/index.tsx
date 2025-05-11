@@ -1,10 +1,10 @@
 import React from 'react';
 import TopNavigationAvatar from '../../component/TopNavigation/TopNavigationAvatar.tsx';
 import { Alert, SafeAreaView } from 'react-native';
-import {NavigationProps} from '../../types/navigationType.tsx';
+import {NavigationProps} from '../../types/navigationType.ts';
 import { Divider, Layout, TopNavigationAction } from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
-import { BasicList } from '../../component/List/BasicList.tsx';
+import BasicList from '../../component/List/BasicList.tsx';
 import * as CommonIcon from '../../component/Icon';
 
 const data = new Array(10).fill({
@@ -26,7 +26,7 @@ const NoteMain: React.FC<NavigationProps> = ({ navigation }) => {
 
     const accessoryRight = (item: any): React.ReactElement => (
         <TopNavigationAction
-            icon={CommonIcon.BasicOpeIcon}
+            // icon={CommonIcon.BasicOpeIcon}
             onPress={() => {Alert.alert('更多', item);}}
         />
     );
@@ -43,12 +43,12 @@ const NoteMain: React.FC<NavigationProps> = ({ navigation }) => {
             />
             <Divider />
             <Layout style={{ flex: 1, alignItems: 'center'}}>
-                <BasicList
-                    data={data}
-                    accessoryLeft={accessoryLeft}
-                    accessoryRight={accessoryRight}
-                    onListItemClick={onNoteLibraryClick}
-                />
+                {/*<BasicList*/}
+                {/*    data={data}*/}
+                {/*    accessoryLeft={accessoryLeft}*/}
+                {/*    accessoryRight={accessoryRight}*/}
+                {/*    onListItemClick={onNoteLibraryClick}*/}
+                {/*/>*/}
             </Layout>
         </SafeAreaView>
     );

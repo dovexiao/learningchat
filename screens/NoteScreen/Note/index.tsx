@@ -3,7 +3,7 @@ import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.
 import { Divider, Button } from '@ui-kitten/components';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { NavigationProps } from '../../../types/navigationType.tsx';
+import { NavigationProps } from '../../../types/navigationType.ts';
 
 const Note: React.FC<NavigationProps> = ({ navigation, route }) => {
     const { item } = route.params;

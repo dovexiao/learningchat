@@ -8,35 +8,22 @@ import {
     useTheme,
 } from '@ui-kitten/components';
 import React from 'react';
-import {NavigationProps} from '../../../types/navigationType.tsx';
+import {NavigationProps} from '../../../types/navigationType.ts';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';
 import {Alert, SafeAreaView, StyleSheet, View} from 'react-native';
 import * as CommonIcon from '../../../component/Icon';
+import {useCache} from "../../../hooks/CacheContext.tsx";
 
-interface IListItem {
-    userName: string;
-    content: string;
-}
-
-const data = [
-    {
-        userName: '用户123',
-        content: 'Description for Item 1234556787577 fshfh5 fjs9iadiaafh sfjhjfhsfifdsif',
-    },
-    {
-        userName: '用户123',
-        content: 'Description for Item 1234556787577 fshfh5 fjs9iadiaafh sfjhjfhsfifdsif',
-    },
-    {
-        userName: '用户123',
-        content: 'Description for Item 1234556787577 fshfh5 fjs9iadiaafh sfjhjfhsfifdsif',
-    },
-];
+// interface IListItem {
+//     userName: string;
+//     content: string;
+// }
 
 const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
-    const MessageItem = route.params.item;
+    const chatSpace = route.params.item;
     const [chatContent, setChatContent] = React.useState('');
     const themes = useTheme();
+    const { chatMessages, sendChatMessage } = useCache()
 
     const renderRightActions = (): React.ReactElement => (
         <>
@@ -47,47 +34,54 @@ const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
         </>
     );
 
-    const renderItem = ({ item, index }: { item: IListItem; index: number }): React.ReactElement => (
-        <View style={styles.recordItem}>
-            {index % 2 === 0 && (
-                <View style={styles.avatarContainer}>
-                    <TopNavigationAction
-                        icon={CommonIcon.PersonIcon}
-                    />
-                </View>
-            )}
-            <View style={[
-                styles.contentContainer,
-                index % 2 === 0 ? styles.leftAlign : styles.rightAlign,
-            ]}>
-                <Text style={styles.userName} numberOfLines={1} ellipsizeMode={'tail'}>
-                    {item.userName + `${index}`}
-                </Text>
-                <Text style={[styles.content, {backgroundColor: themes['background-basic-color-1']}]}>
-                    {item.content}
-                </Text>
-            </View>
-            {index % 2 === 1 && (
-                <View style={styles.avatarContainer}>
-                    <TopNavigationAction
-                        icon={CommonIcon.PersonIcon}
-                    />
-                </View>
-            )}
-        </View>
-    );
+    // const renderItem = ({ item, index }: { item: any; index: number }): React.ReactElement => (
+    //     <View style={styles.recordItem}>
+    //         {index % 2 === 0 && (
+    //             <View style={styles.avatarContainer}>
+    //                 <TopNavigationAction
+    //                     icon={CommonIcon.PersonIcon}
+    //                 />
+    //             </View>
+    //         )}
+    //         <View style={[
+    //             styles.contentContainer,
+    //             index % 2 === 0 ? styles.leftAlign : styles.rightAlign,
+    //         ]}>
+    //             <Text style={styles.userName} numberOfLines={1} ellipsizeMode={'tail'}>
+    //                 {item.userName + `${index}`}
+    //             </Text>
+    //             <Text style={[styles.content, {backgroundColor: themes['background-basic-color-1']}]}>
+    //                 {item.content}
+    //             </Text>
+    //         </View>
+    //         {index % 2 === 1 && (
+    //             <View style={styles.avatarContainer}>
+    //                 <TopNavigationAction
+    //                     icon={CommonIcon.PersonIcon}
+    //                 />
+    //             </View>
+    //         )}
+    //     </View>
+    // );
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <TopNavigationOpe navigation={navigation} renderItemAccessory={renderRightActions} title={MessageItem.title} />
+            <TopNavigationOpe navigation={navigation} renderItemAccessory={renderRightActions} title={chatSpace.name} />
             <Divider />
             <Layout style={{ flex: 1, alignItems: 'center' }}>
-                <List
-                    style={styles.container}
-                    data={data}
-                    // ItemSeparatorComponent={Divider}
-                    renderItem={renderItem}
-                />
+                {/*<List*/}
+                {/*    style={styles.container}*/}
+                {/*    data={}*/}
+                {/*    // ItemSeparatorComponent={Divider}*/}
+                {/*    renderItem={renderItem}*/}
+                {/*/>*/}
+                {
+                    chatMessages.filter((item: any) => item.spaceId === chatSpace.spaceId).map((item: any) => (
+                        <View key={item.mid}>
+                            <Text>{item.from.nickname}-{item.from.avatar}-{item.content.type}-{item.content.body}</Text>
+                        </View>
+                    ))
+                }
             </Layout>
             <View style={[styles.opeContainer, { backgroundColor: themes['background-basic-color-1']}]}>
                 <View style={styles.inputContainer}>
@@ -101,7 +95,13 @@ const ChatSpace: React.FC<NavigationProps> = ({ navigation, route }) => {
                 <View style={styles.sendContainer}>
                     <TopNavigationAction
                         icon={CommonIcon.SendIcon}
-                        onPress={() => {Alert.alert('发送');}}
+                        onPress={async () => {
+                            if (chatContent) {
+                                await sendChatMessage(chatSpace.spaceId, chatContent)
+                            } else {
+                                Alert.alert('输入内容不能为空');
+                            }
+                        }}
                     />
                 </View>
                 <View style={styles.opesContainer}>
