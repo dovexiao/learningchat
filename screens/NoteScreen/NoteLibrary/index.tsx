@@ -1,22 +1,16 @@
 import React from 'react';
-import {Alert, SafeAreaView} from 'react-native';
-import {Divider, Layout, TopNavigationAction} from '@ui-kitten/components';
+import {Alert, Pressable, SafeAreaView} from 'react-native';
+import {Divider, Layout, Text, TopNavigationAction} from '@ui-kitten/components';
 import type { IconElement } from '@ui-kitten/components';
 import {NavigationProps} from '../../../types/navigationType.ts';
-import {BasicList} from '../../../component/List/BasicList.tsx';
+import BasicList from '../../../component/List/BasicList.tsx';
 import TopNavigationOpe from '../../../component/TopNavigation/TopNavigationOpe.tsx';
 import * as CommonIcon from '../../../component/Icon';
-
-const data = new Array(10).fill({
-    title: '图形学之史',
-    subTitle: '计算机 2025-04-15',
-    other: '',
-});
 
 const NoteLibrary: React.FC<NavigationProps> = ({ navigation, route}) => {
     const noteLibrary = route.params.item;
 
-    const onNoteLibraryClick = (item: any) => {
+    const onNoteClick = (item: any) => {
         navigation.navigate('Note', { item });
     };
 
@@ -46,12 +40,15 @@ const NoteLibrary: React.FC<NavigationProps> = ({ navigation, route}) => {
             />
             <Divider />
             <Layout style={{ flex: 1, alignItems: 'center'}}>
-                <BasicList
-                    data={data}
-                    accessoryLeft={accessoryLeft}
-                    accessoryRight={accessoryRight}
-                    onListItemClick={onNoteLibraryClick}
-                />
+                <Pressable onPress={() => onNoteClick({})}>
+                    <Text>笔记123</Text>
+                </Pressable>
+                {/*<BasicList*/}
+                {/*    data={data}*/}
+                {/*    accessoryLeft={accessoryLeft}*/}
+                {/*    accessoryRight={accessoryRight}*/}
+                {/*    onListItemClick={onNoteLibraryClick}*/}
+                {/*/>*/}
             </Layout>
         </SafeAreaView>
     );

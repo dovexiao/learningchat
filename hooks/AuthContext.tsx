@@ -12,7 +12,7 @@ type AuthContextType = {
 export const AuthContext = React.createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-    const [isTokenRefreshed, setIsTokenRefreshed] = React.useState<boolean | undefined>(undefined);
+    const [isTokenRefreshed, setIsTokenRefreshed] = React.useState<boolean | undefined>(true);
 
     const { connect } = useSocket();
     const { setUser } = useGlobal();
@@ -45,7 +45,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
     React.useEffect(() => {
         (async () => {
-            await refreshTokenAndConnect();
+            // await refreshTokenAndConnect();
         })();
     }, []);
 

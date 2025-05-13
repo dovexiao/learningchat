@@ -14,11 +14,12 @@ import {NavigationProps} from '../../types/navigationType.ts';
 import DoubleColWaterfallList from '../../component/List/DoubleColWaterfallList.tsx';
 import * as CommonIcons from '../../component/Icon';
 import {useAuth} from '../../hooks/AuthContext.tsx';
-import * as api from '../../services/api/ForumApi';
+import * as ForumApi from '../../services/api/ForumApi';
 import {errAlert} from '../../component/Alert/err.tsx';
 import FastImage from 'react-native-fast-image';
 import ContentLoader, {Rect} from 'react-content-loader/native';
-import {saveBase64ToFile} from '../../services/storage/ImageCache.ts';
+import {saveImageToFile} from '../../services/storage/ImageCache.ts';
+import {useGlobal} from "../../hooks/GlobalContext.tsx";
 
 type ImageItem = {
     type: string | undefined;
@@ -44,7 +45,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const themes = useTheme();
-    const { userId } = useAuth().getUser();
+    const { userId } = useGlobal();
 
     const handleAddPostClick = () => {
         navigation.navigate('PostTI');
@@ -53,12 +54,12 @@ const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
     // 获取下一页帖子数据
     const getNextPosts = async () => {
         try {
-            const { posts } = await api.getPosts(userId);
+            const { posts } = await ForumApi.getPosts(userId);
             console.log(posts);
             return await Promise.all(posts.map(async (post: Post) => {
                 let path = '';
                 if (post.cover && post.cover.base64) {
-                    path = await saveBase64ToFile(post.cover.base64);
+                    path = await saveImageToFile(post.cover.base64, 'POSTS');
                 }
                 console.log(path);
                 return {
@@ -200,7 +201,7 @@ const ForumMain: React.FC<NavigationProps> = ({ navigation }) => {
                 <Layout style={{ flex: 1, backgroundColor: themes['background-basic-color-2']}}>
                     <View style={{ flex: 1, display: selectedIndex === 0 ? 'flex' : 'none' }}>
                         <DoubleColWaterfallList
-                            skeletonItem={skeletonItem}
+                            // skeletonItem={skeletonItem}
                             renderListItem={RenderListItem}
                             getNextPageData={getNextPosts}
                             estimateListItemHeight={estimateListItemHeight}

@@ -1,6 +1,6 @@
 import api from './axios.ts';
 
-export const getPosts = async (userId: number) => {
+export const getPosts = async (userId: string) => {
     try {
         const response = await api.get(`/forum/users/${userId}/posts`, {
             params: {

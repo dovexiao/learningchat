@@ -131,8 +131,8 @@ export const CenterCardDisplay = forwardRef<CenterCardDisplayHandle, CenterCardD
 
                     {/* 笔记模块 */}
                     <View style={[styles.page, { left: SCREEN_WIDTH }]}>
-                        {/*<NoteMain navigation={navigation} />*/}
-                        <Text>笔记</Text>
+                        <NoteMain navigation={navigation} />
+                        {/*<Text>笔记</Text>*/}
                     </View>
 
                     {/* 题库模块 */}

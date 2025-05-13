@@ -8,7 +8,6 @@ import { saveImageToFile } from "../services/storage/ImageCache.ts";
 import RNUUID from 'react-native-uuid';
 import * as ChatApi from "../services/api/ChatApi.ts";
 import * as SystemApi from "../services/api/SystemApi.ts";
-import {ChatMessagesType} from "../types/chatTypes.ts";
 
 type CacheContextType = {
     chatSpaces: chatTypes.ChatSpaceType[],
