@@ -1,6 +1,7 @@
 import React, {useRef} from 'react';
 import BottomModal from '../component/Modal/BottomModal.tsx';
 import Message from '../component/Modal/Message.tsx';
+import SlideOutView from "../component/Modal/SlideOutView.tsx";
 
 type User = {
     userId: string;
@@ -18,6 +19,7 @@ type GlobalContextType = {
     centerModalRef: any;
     bottomModalRef: any;
     messageRef: any;
+    slideOutViewRef: any;
 };
 
 export const GlobalContext = React.createContext<GlobalContextType | null>(null);
@@ -30,7 +32,7 @@ export const GlobalProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     const centerModalRef = useRef<any>(null);
     const bottomModalRef = useRef<any>(null);
     const messageRef = useRef<any>(null);
-
+    const slideOutViewRef = React.useRef<any>(null);
     const setUser = (user: User) => {
         setUserId(user.userId);
         setNickname(user.nickname);
@@ -47,6 +49,7 @@ export const GlobalProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         centerModalRef,
         bottomModalRef,
         messageRef,
+        slideOutViewRef,
     };
 
     return (
@@ -54,6 +57,7 @@ export const GlobalProvider: React.FC<React.PropsWithChildren> = ({ children }) 
             {children}
             <BottomModal ref={bottomModalRef} />
             <Message ref={messageRef}/>
+            <SlideOutView ref={slideOutViewRef} />
         </GlobalContext.Provider>
     );
 };
