@@ -12,6 +12,7 @@ type Friend = {
     name: string;
     status: string;
     avatar: string;
+    handlePress?: () => void;
 };
 
 const friendsData: Friend[] = [
@@ -22,8 +23,8 @@ const friendsData: Friend[] = [
     { id: '5', name: 'David Wilson', status: 'Last seen 1 day ago', avatar: 'https://i.pravatar.cc/150?u=david' },
 ];
 
-const FriendItem = ({ name, status, avatar }: Friend) => (
-    <View style={styles.friendItemContainer}>
+const FriendItem = ({ name, status, avatar, handlePress }: Friend) => (
+    <TouchableOpacity style={styles.friendItemContainer} onPress={handlePress}>
         <Image source={{ uri: avatar }} style={styles.avatar} />
         <View style={styles.friendInfo}>
             <Text style={styles.friendName}>{name}</Text>
@@ -35,7 +36,7 @@ const FriendItem = ({ name, status, avatar }: Friend) => (
         {/*<TouchableOpacity style={[styles.actionButton, styles.profileButton]}>*/}
         {/*    <Text style={styles.actionButtonText}>Profile</Text>*/}
         {/*</TouchableOpacity>*/}
-    </View>
+    </TouchableOpacity>
 );
 
 export const FriendsListScreen: React.FC<NavigationProps> = ({ navigation, route }) => {
@@ -70,7 +71,7 @@ export const FriendsListScreen: React.FC<NavigationProps> = ({ navigation, route
 
             <FlatList
                 data={friendsData}
-                renderItem={({ item }) => <FriendItem {...item} />}
+                renderItem={({ item }) => <FriendItem {...item} handlePress={() => navigation.navigate('Chat', { friend: item })}/>}
                 keyExtractor={item => item.id}
                 contentContainerStyle={styles.listContentContainer}
             />

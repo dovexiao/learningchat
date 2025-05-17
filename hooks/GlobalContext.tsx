@@ -20,6 +20,8 @@ type GlobalContextType = {
     bottomModalRef: any;
     messageRef: any;
     slideOutViewRef: any;
+    version: string;
+    handleVersion: (version: string) => void;
 };
 
 export const GlobalContext = React.createContext<GlobalContextType | null>(null);
@@ -33,6 +35,12 @@ export const GlobalProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     const bottomModalRef = useRef<any>(null);
     const messageRef = useRef<any>(null);
     const slideOutViewRef = React.useRef<any>(null);
+    const [version, setVersion] = React.useState<string>('2');
+
+    const handleVersion = (version: string) => {
+        setVersion(version);
+    };
+
     const setUser = (user: User) => {
         setUserId(user.userId);
         setNickname(user.nickname);
@@ -50,6 +58,8 @@ export const GlobalProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         bottomModalRef,
         messageRef,
         slideOutViewRef,
+        version,
+        handleVersion
     };
 
     return (

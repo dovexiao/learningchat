@@ -7,7 +7,7 @@ import {NavigationProps} from "../types/navigationType.ts";
 export const WelcomeScreen: React.FC<NavigationProps> =  ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
             <View style={styles.container}>
                 <Text style={styles.title}>Welcome to ChatHub</Text>
                 <Text style={styles.subtitle}>与朋友联系，实时聊天，高效管理资源</Text>

@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import {NavigationProps} from "../types/navigationType.ts";
 import {Icon} from "@ui-kitten/components";
 import {useGlobal} from "../hooks/GlobalContext.tsx";
+import VersionHistory from "../component/Modal/VersionHistory.tsx";
 
 interface Project {
     id: string;
@@ -29,6 +30,7 @@ const projectsData: Project[] = [
 
 export const ResourcesScreen: React.FC<NavigationProps> = ({ navigation, route }) => {
     const { slideOutViewRef } = useGlobal();
+    const [visible, setVisible] = React.useState(true);
 
     const renderHeader = () => (
         <View style={[styles.row, styles.headerRow]}>
@@ -50,6 +52,7 @@ export const ResourcesScreen: React.FC<NavigationProps> = ({ navigation, route }
         </View>
     );
 
+    // @ts-ignore
     return (
         <SafeAreaView style={styles.safeArea}>
             <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
@@ -62,22 +65,28 @@ export const ResourcesScreen: React.FC<NavigationProps> = ({ navigation, route }
             </View>
 
             <View style={styles.controlsContainer}>
-                <TouchableOpacity style={styles.versionButton}>
+                <TouchableOpacity style={styles.versionButton} onPress={() => setVisible(!visible)}>
                     <Icon name={'options-outline'} fill={'#FFFFFF'} style={{ width: 20, height: 20 }}></Icon>
                     <Text style={styles.versionText}>版本树</Text>
                 </TouchableOpacity>
             </View>
 
-            <ScrollView
-                horizontal={true}        // 启用横向滚动
-                showsHorizontalScrollIndicator={false}  // 可选：隐藏水平滚动条
-                style={styles.scrollView}
-            >
-                <View style={styles.tableContainer}>
-                    {renderHeader()}
-                    {projectsData.map(renderItem)}
-                </View>
+            {visible && <VersionHistory/>}
+
+            <ScrollView>
+                <ScrollView
+                    horizontal={true}        // 启用横向滚动
+                    showsHorizontalScrollIndicator={false}  // 可选：隐藏水平滚动条
+                    style={styles.scrollView}
+                >
+                    <View style={styles.tableContainer}>
+                        {renderHeader()}
+                        {projectsData.map(renderItem)}
+                    </View>
+                </ScrollView>
+                <View style={{height: 40}}></View>
             </ScrollView>
+
         </SafeAreaView>
     );
 }

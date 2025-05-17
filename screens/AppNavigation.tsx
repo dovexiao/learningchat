@@ -7,6 +7,7 @@ import {FriendsListScreen} from "./FriendsListScreen.tsx";
 import {LoginScreen} from "./LoginScreen.tsx";
 import {RegisterScreen} from "./RegisterScreen.tsx";
 import {ResourcesScreen} from "./ResourcesScreen.tsx";
+import ChatScreen from "./ChatScreen.tsx";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -17,6 +18,7 @@ const HomeNavigator = () => (
         <Screen name="Resources" component={ResourcesScreen} />
         <Screen name="Login" component={LoginScreen} />
         <Screen name="Register" component={RegisterScreen} />
+        <Screen name="Chat" component={ChatScreen} initialParams={{ friend: null }} />
     </Navigator>
 );
 
